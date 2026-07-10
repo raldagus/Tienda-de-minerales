@@ -1,0 +1,101 @@
+<div class="catalogo-vista">
+
+  <aside class="filtros">
+    <div class="filtros__encabezado">
+      <h2>Filtrar</h2>
+      @if (hayFiltrosActivos()) {
+        <button class="filtros__limpiar" (click)="limpiarFiltros()">Limpiar</button>
+      }
+    </div>
+
+    <div class="filtros__grupo">
+      <h3>Precio</h3>
+      <div class="filtros__precio">
+        <label>
+          <span>Desde</span>
+          <input
+            type="number"
+            [placeholder]="precioMinCatalogo().toString()"
+            [value]="precioMin() ?? ''"
+            (input)="actualizarPrecioMin($any($event.target).value)"
+          />
+        </label>
+        <label>
+          <span>Hasta</span>
+          <input
+            type="number"
+            [placeholder]="precioMaxCatalogo().toString()"
+            [value]="precioMax() ?? ''"
+            (input)="actualizarPrecioMax($any($event.target).value)"
+          />
+        </label>
+      </div>
+    </div>
+
+    <div class="filtros__grupo">
+      <h3>Variedad</h3>
+      <div class="filtros__chips">
+        @for (variedad of variedades; track variedad) {
+          <button
+            class="chip"
+            [class.chip--activo]="variedadesSeleccionadas().has(variedad)"
+            (click)="toggleVariedad(variedad)"
+          >
+            {{ variedad }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="filtros__grupo">
+      <h3>Tipo</h3>
+      <div class="filtros__chips">
+        @for (tipo of tipos; track tipo.valor) {
+          <button
+            class="chip"
+            [class.chip--activo]="tiposSeleccionados().has(tipo.valor)"
+            (click)="toggleTipo(tipo.valor)"
+          >
+            {{ tipo.etiqueta }}
+          </button>
+        }
+      </div>
+    </div>
+  </aside>
+
+  <section class="resultados">
+    <div class="resultados__encabezado">
+      <h1>Catálogo</h1>
+      <p>{{ piedrasFiltradas().length }} piedra{{ piedrasFiltradas().length === 1 ? '' : 's' }}</p>
+    </div>
+
+    @if (piedrasFiltradas().length === 0) {
+      <div class="resultados__vacio">
+        <p>No encontramos piedras con esos filtros.</p>
+        <button class="btn btn--secundario" (click)="limpiarFiltros()">Limpiar filtros</button>
+      </div>
+    } @else {
+      <div class="resultados__grid">
+        @for (piedra of piedrasFiltradas(); track piedra.id) {
+          <article class="tarjeta">
+            <div class="tarjeta__marco" [class]="'tarjeta__marco--' + piedra.colorTag">
+              <img [src]="piedra.imagen" [alt]="piedra.nombre" class="tarjeta__imagen" />
+            </div>
+
+            <span class="tarjeta__tipo">{{ piedra.tipo === 'calibrada' ? 'Calibrada' : 'En bruto' }}</span>
+            <h3 class="tarjeta__nombre">{{ piedra.nombre }}</h3>
+            <p class="tarjeta__variedad">
+              {{ piedra.variedad }}{{ piedra.calibreMm ? ' · ' + piedra.calibreMm + 'mm' : '' }}
+            </p>
+            <p class="tarjeta__precio">${{ piedra.precio }}</p>
+
+            <button class="btn btn--secundario" (click)="pedidoService.agregarAlPedido(piedra)">
+              Agregar al pedido
+            </button>
+          </article>
+        }
+      </div>
+    }
+  </section>
+
+</div>
