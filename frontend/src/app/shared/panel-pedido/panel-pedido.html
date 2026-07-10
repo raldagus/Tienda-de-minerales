@@ -1,0 +1,59 @@
+@if (pedidoService.estaAbierto()) {
+  <div class="panel-pedido__backdrop" (click)="pedidoService.cerrarPanel()"></div>
+}
+
+<aside class="panel-pedido" [class.panel-pedido--abierto]="pedidoService.estaAbierto()">
+  <div class="panel-pedido__encabezado">
+    <h2>Tu pedido</h2>
+    <button
+      class="panel-pedido__cerrar"
+      (click)="pedidoService.cerrarPanel()"
+      aria-label="Cerrar pedido"
+    >
+      ✕
+    </button>
+  </div>
+
+  @if (pedidoService.pedido().length === 0) {
+    <p class="panel-pedido__vacio">
+      Todavía no agregaste piedras. Elegí piezas del catálogo para armar tu pedido.
+    </p>
+  } @else {
+    <ul class="panel-pedido__lista">
+      @for (item of pedidoService.pedido(); track item.piedra.id) {
+        <li class="panel-pedido__item">
+          <span>
+            {{ item.cantidad }}x {{ item.piedra.nombre }}
+            @if (item.piedra.calibreMm) {
+              ({{ item.piedra.calibreMm }}mm)
+            }
+          </span>
+          <span>${{ item.piedra.precio * item.cantidad }}</span>
+          <button
+            class="panel-pedido__quitar"
+            (click)="pedidoService.quitarDelPedido(item.piedra.id)"
+            aria-label="Quitar"
+          >
+            ✕
+          </button>
+        </li>
+      }
+    </ul>
+
+    <div class="panel-pedido__total">
+      <span>Total</span>
+      <span>${{ pedidoService.totalPedido() }}</span>
+    </div>
+
+    <a
+      [href]="pedidoService.linkPedidoWhatsapp()"
+      target="_blank"
+      class="btn btn--primario btn--grande"
+    >
+      Confirmar pedido por mensaje
+    </a>
+    <p class="panel-pedido__nota">
+      Te vamos a contactar para coordinar pago y envío. No se realiza cobro en la página.
+    </p>
+  }
+</aside>
