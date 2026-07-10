@@ -1,0 +1,22 @@
+<header class="header">
+  <nav class="header__nav">
+    <a routerLink="/">Inicio</a>
+    <a routerLink="/catalogo">Catálogo</a>
+    <a href="#nosotros">Nosotros</a>
+  </nav>
+
+  <a href="#inicio" class="header__logo">
+    <span class="header__logo-mark">◐</span>
+    <span class="header__logo-text">Tienda de Minerales</span>
+  </a>
+
+  <nav class="header__nav header__nav--right">
+    <a href="#contacto">Contacto</a>
+    <button class="header__cart" (click)="pedidoService.togglePanel()">
+      Pedido
+      @if (pedidoService.cantidadItems() > 0) {
+        <span class="header__cart-badge">{{ pedidoService.cantidadItems() }}</span>
+      }
+    </button>
+  </nav>
+</header>
