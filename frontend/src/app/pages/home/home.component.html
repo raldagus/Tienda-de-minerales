@@ -1,0 +1,78 @@
+<section class="hero" id="inicio">
+  <div class="hero__fondo">
+    <img
+      src="imagenes/foto-inicio.jpg"
+      alt="Mosaico de piedras ágata calibradas"
+      class="hero__imagen-fondo"
+    />
+    <div class="hero__degradado"></div>
+  </div>
+
+  <div class="hero__texto">
+    <p class="hero__eyebrow">Piedras calibradas · corte y pulido</p>
+    <h1 class="hero__titulo">
+      Cada piedra<br />
+      es un corte<br />
+      único de la tierra.
+    </h1>
+    <p class="hero__descripcion">
+      Catálogo de ágatas y cuarzos calibrados para joyería y diseño.
+      Elegí las piezas que te interesan y coordinamos tu pedido por mensaje.
+    </p>
+    <a href="#catalogo" class="btn btn--primario">Ver catálogo</a>
+  </div>
+</section>
+
+<section class="catalogo" id="catalogo">
+  <div class="catalogo__encabezado">
+    <h2>Catálogo</h2>
+    <p>Piezas calibradas, listas para engarzar.</p>
+  </div>
+
+  <div class="catalogo__grid">
+    @for (piedra of catalogo(); track piedra.id) {
+      <article class="tarjeta">
+        <div class="tarjeta__marco" [class]="'tarjeta__marco--' + piedra.colorTag">
+          <img [src]="piedra.imagen" [alt]="piedra.nombre" class="tarjeta__imagen" />
+        </div>
+
+        <h3 class="tarjeta__nombre">{{ piedra.nombre }}</h3>
+        <p class="tarjeta__variedad">{{ piedra.variedad }} · {{ piedra.calibreMm }}mm</p>
+        <p class="tarjeta__precio">${{ piedra.precio }}</p>
+
+        <button class="btn btn--secundario" (click)="pedidoService.agregarAlPedido(piedra)">
+          Agregar al pedido
+        </button>
+      </article>
+    }
+  </div>
+</section>
+
+<section class="detalle" id="destacada">
+  <div class="detalle__marco" [class]="'detalle__marco--' + destacada().colorTag">
+    <img [src]="destacada().imagen" [alt]="destacada().nombre" class="detalle__imagen" />
+  </div>
+
+  <div class="detalle__info">
+    <p class="detalle__variedad">{{ destacada().variedad }}</p>
+    <h2 class="detalle__nombre">{{ destacada().nombre }}</h2>
+    <p class="detalle__precio">${{ destacada().precio }} / unidad</p>
+
+    <dl class="detalle__specs">
+      <div>
+        <dt>Calibre</dt>
+        <dd>{{ destacada().calibreMm }}mm</dd>
+      </div>
+      <div>
+        <dt>Origen</dt>
+        <dd>Corte y pulido artesanal</dd>
+      </div>
+    </dl>
+
+    <p class="detalle__descripcion">{{ destacada().descripcion }}</p>
+
+    <button class="btn btn--primario" (click)="pedidoService.agregarAlPedido(destacada())">
+      Agregar al pedido
+    </button>
+  </div>
+</section>

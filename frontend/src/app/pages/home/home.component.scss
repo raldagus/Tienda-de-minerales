@@ -1,0 +1,334 @@
+// ============================================
+// Tokens y estilos base compartidos: ver styles.scss global
+// ============================================
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+// ============================================
+// Botones (compartidos)
+// ============================================
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radio-boton);
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+
+  &:focus-visible {
+    outline: 2px solid var(--cuarzo);
+    outline-offset: 3px;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.btn--primario {
+  background: var(--agata);
+  color: var(--onix);
+
+  &:hover {
+    background: var(--agata-hover);
+  }
+}
+
+.btn--secundario {
+  background: transparent;
+  color: var(--cuarzo);
+  border: 1px solid var(--piedra-borde);
+  width: 100%;
+
+  &:hover {
+    border-color: var(--malaquita);
+    color: var(--malaquita-hover);
+  }
+}
+
+// ============================================
+// Hero
+// ============================================
+.hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 640px;
+  padding: 5rem 4rem;
+  overflow: hidden;
+  isolation: isolate; // asegura que .hero__texto quede sobre el fondo sin pelear con z-index global
+
+  @media (max-width: 900px) {
+    padding: 3rem 1.5rem;
+    min-height: 560px;
+    align-items: flex-end;
+  }
+}
+
+.hero__fondo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero__imagen-fondo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero__degradado {
+  position: absolute;
+  inset: 0;
+  // Oscuro y sólido donde va el texto (izquierda), transparente hacia la derecha
+  // para que se siga viendo bien la piedra. En mobile pasa a un degradado
+  // vertical porque el texto se apila arriba de la imagen.
+  background: linear-gradient(
+    90deg,
+    var(--onix) 0%,
+    rgba(27, 25, 24, 0.92) 35%,
+    rgba(27, 25, 24, 0.55) 60%,
+    rgba(27, 25, 24, 0.1) 85%
+  );
+
+  @media (max-width: 900px) {
+    background: linear-gradient(
+      0deg,
+      var(--onix) 15%,
+      rgba(27, 25, 24, 0.85) 45%,
+      rgba(27, 25, 24, 0.35) 75%
+    );
+  }
+}
+
+.hero__texto {
+  position: relative;
+  z-index: 1;
+  max-width: 34rem;
+}
+
+.hero__eyebrow {
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  color: var(--malaquita-hover);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+
+.hero__titulo {
+  font-family: var(--fuente-display);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.05;
+  font-weight: 500;
+  margin: 0 0 1.5rem;
+}
+
+.hero__descripcion {
+  color: var(--ceniza);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  max-width: 32rem;
+  margin: 0 0 2rem;
+}
+
+// ============================================
+// Catálogo
+// ============================================
+.catalogo {
+  padding: 4rem;
+
+  @media (max-width: 720px) {
+    padding: 3rem 1.5rem;
+  }
+}
+
+.catalogo__encabezado {
+  text-align: center;
+  margin-bottom: 3rem;
+
+  h2 {
+    font-family: var(--fuente-display);
+    font-size: 2.25rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem;
+  }
+
+  p {
+    color: var(--ceniza);
+    margin: 0;
+  }
+}
+
+.catalogo__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.tarjeta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.4rem;
+}
+
+.tarjeta__marco {
+  width: 100%;
+  max-width: 190px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  padding: 4px;
+  margin-bottom: 0.75rem;
+
+  &--agata {
+    background: var(--agata);
+  }
+
+  &--malaquita {
+    background: var(--malaquita);
+  }
+}
+
+.tarjeta__imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid var(--onix);
+  display: block;
+}
+
+.tarjeta__nombre {
+  font-family: var(--fuente-display);
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.tarjeta__variedad {
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  color: var(--ceniza);
+  margin: 0;
+}
+
+.tarjeta__precio {
+  font-family: var(--fuente-mono);
+  font-size: 1rem;
+  color: var(--agata);
+  margin: 0 0 0.75rem;
+}
+
+// ============================================
+// Detalle (pieza destacada)
+// ============================================
+.detalle {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 3.5rem;
+  align-items: center;
+  padding: 4rem;
+  background: var(--piedra);
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    padding: 3rem 1.5rem;
+    text-align: center;
+  }
+}
+
+.detalle__marco {
+  width: 100%;
+  max-width: 340px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  padding: 6px;
+  margin: 0 auto;
+
+  &--agata {
+    background: var(--agata);
+  }
+
+  &--malaquita {
+    background: var(--malaquita);
+  }
+}
+
+.detalle__imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 6px solid var(--piedra);
+  display: block;
+}
+
+.detalle__variedad {
+  font-family: var(--fuente-mono);
+  color: var(--malaquita-hover);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.5rem;
+}
+
+.detalle__nombre {
+  font-family: var(--fuente-display);
+  font-size: 2rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+}
+
+.detalle__precio {
+  font-family: var(--fuente-mono);
+  color: var(--agata);
+  font-size: 1.3rem;
+  margin: 0 0 1.5rem;
+}
+
+.detalle__specs {
+  display: flex;
+  gap: 2.5rem;
+  margin: 0 0 1.5rem;
+
+  @media (max-width: 900px) {
+    justify-content: center;
+  }
+
+  dt {
+    font-size: 0.8rem;
+    color: var(--ceniza);
+    margin-bottom: 0.25rem;
+  }
+
+  dd {
+    font-family: var(--fuente-mono);
+    margin: 0;
+  }
+}
+
+.detalle__descripcion {
+  color: var(--ceniza);
+  line-height: 1.6;
+  max-width: 30rem;
+  margin: 0 0 2rem;
+
+  @media (max-width: 900px) {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
