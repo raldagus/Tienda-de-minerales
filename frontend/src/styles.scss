@@ -1,1 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+
+// ============================================
+// Tokens — Tienda de Minerales
+// ============================================
+:root {
+  --onix: #1b1918;
+  --piedra: #26231f;
+  --piedra-borde: #3a3530;
+  --cuarzo: #f2ece1;
+  --ceniza: #a79c8c;
+  --agata: #c77b4b;
+  --agata-hover: #d98d5c;
+  --malaquita: #3f7a63;
+  --malaquita-hover: #4e9377;
+
+  --fuente-display: 'Fraunces', Georgia, serif;
+  --fuente-cuerpo: 'Inter', sans-serif;
+  --fuente-mono: 'Space Mono', monospace;
+
+  --radio-boton: 999px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--onix);
+  color: var(--cuarzo);
+  font-family: var(--fuente-cuerpo);
+}
