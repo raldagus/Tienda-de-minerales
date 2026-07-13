@@ -14,8 +14,6 @@ import { PedidoService } from '../../services/pedido.service';
 export class CatalogoComponent {
   protected pedidoService = inject(PedidoService);
 
-  // --- Datos completos del catálogo ---
-  // Reemplazar `imagen` por las rutas reales en /imagenes/
   piedras = signal<Piedra[]>([
     { id: 'agata-azul-20', nombre: 'Ágata Azul', variedad: 'Ágata', tipo: 'calibrada', calibreMm: 20, precio: 4500, imagen: 'imagenes/agata-azul.jpg', colorTag: 'agata' },
     { id: 'agata-verde-18', nombre: 'Ágata Verde', variedad: 'Ágata', tipo: 'calibrada', calibreMm: 18, precio: 4200, imagen: 'imagenes/agata-verde.jpg', colorTag: 'malaquita' },

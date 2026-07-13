@@ -1,14 +1,10 @@
-// ============================================
-// Tokens y estilos base compartidos: ver styles.scss global
-// ============================================
+// estilos base compartidos
 :host {
   display: block;
   min-height: 100vh;
 }
 
-// ============================================
 // Botones (compartidos)
-// ============================================
 .btn {
   display: inline-flex;
   align-items: center;
@@ -55,9 +51,7 @@
   }
 }
 
-// ============================================
 // Hero
-// ============================================
 .hero {
   position: relative;
   display: flex;
@@ -65,7 +59,7 @@
   min-height: 640px;
   padding: 5rem 4rem;
   overflow: hidden;
-  isolation: isolate; // asegura que .hero__texto quede sobre el fondo sin pelear con z-index global
+  isolation: isolate; 
 
   @media (max-width: 900px) {
     padding: 3rem 1.5rem;
@@ -90,9 +84,6 @@
 .hero__degradado {
   position: absolute;
   inset: 0;
-  // Oscuro y sólido donde va el texto (izquierda), transparente hacia la derecha
-  // para que se siga viendo bien la piedra. En mobile pasa a un degradado
-  // vertical porque el texto se apila arriba de la imagen.
   background: linear-gradient(
     90deg,
     var(--onix) 0%,
@@ -142,9 +133,7 @@
   margin: 0 0 2rem;
 }
 
-// ============================================
 // Catálogo
-// ============================================
 .catalogo {
   padding: 4rem;
 
@@ -233,12 +222,10 @@
   margin: 0 0 0.75rem;
 }
 
-// ============================================
-// Detalle (pieza destacada)
-// ============================================
-.detalle {
+// Banner → Diccionario de significados
+.banner-diccionario {
   display: grid;
-  grid-template-columns: 380px 1fr;
+  grid-template-columns: 1fr 340px;
   gap: 3.5rem;
   align-items: center;
   padding: 4rem;
@@ -251,33 +238,7 @@
   }
 }
 
-.detalle__marco {
-  width: 100%;
-  max-width: 340px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  padding: 6px;
-  margin: 0 auto;
-
-  &--agata {
-    background: var(--agata);
-  }
-
-  &--malaquita {
-    background: var(--malaquita);
-  }
-}
-
-.detalle__imagen {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 6px solid var(--piedra);
-  display: block;
-}
-
-.detalle__variedad {
+.banner-diccionario__eyebrow {
   font-family: var(--fuente-mono);
   color: var(--malaquita-hover);
   font-size: 0.85rem;
@@ -286,49 +247,40 @@
   margin: 0 0 0.5rem;
 }
 
-.detalle__nombre {
+.banner-diccionario__titulo {
   font-family: var(--fuente-display);
-  font-size: 2rem;
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
   font-weight: 500;
-  margin: 0 0 0.5rem;
+  margin: 0 0 1rem;
 }
 
-.detalle__precio {
-  font-family: var(--fuente-mono);
-  color: var(--agata);
-  font-size: 1.3rem;
-  margin: 0 0 1.5rem;
-}
-
-.detalle__specs {
-  display: flex;
-  gap: 2.5rem;
-  margin: 0 0 1.5rem;
-
-  @media (max-width: 900px) {
-    justify-content: center;
-  }
-
-  dt {
-    font-size: 0.8rem;
-    color: var(--ceniza);
-    margin-bottom: 0.25rem;
-  }
-
-  dd {
-    font-family: var(--fuente-mono);
-    margin: 0;
-  }
-}
-
-.detalle__descripcion {
+.banner-diccionario__texto {
   color: var(--ceniza);
   line-height: 1.6;
-  max-width: 30rem;
+  max-width: 32rem;
   margin: 0 0 2rem;
 
   @media (max-width: 900px) {
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+.banner-diccionario__marco {
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  padding: 6px;
+  margin: 0 auto;
+  background: conic-gradient(from 180deg, var(--agata), var(--malaquita), var(--agata));
+}
+
+.banner-diccionario__imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 6px solid var(--piedra);
+  display: block;
 }

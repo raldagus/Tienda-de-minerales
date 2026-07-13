@@ -1,0 +1,48 @@
+<footer class="footer">
+  <div class="footer__grid">
+
+    <div class="footer__marca">
+      <a routerLink="/" class="footer__logo">
+        <span class="footer__logo-mark">◐</span>
+        <span class="footer__logo-text">Tienda de Minerales</span>
+      </a>
+      <p class="footer__descripcion">
+        Piedras calibradas y en bruto, seleccionadas y pulidas a mano.
+      </p>
+    </div>
+
+    <div class="footer__columna">
+      <h3>Navegación</h3>
+      <ul>
+        <li><a routerLink="/">Inicio</a></li>
+        <li><a routerLink="/catalogo">Catálogo</a></li>
+        <li><a href="#nosotros">Sobre nosotros</a></li>
+      </ul>
+    </div>
+
+    <div class="footer__columna">
+      <h3>Cómo comprar</h3>
+      <ol class="footer__pasos">
+        <li>Elegí tus piedras y agregalas al pedido</li>
+        <li>Confirmá el pedido por WhatsApp</li>
+        <li>Coordinamos pago y envío</li>
+      </ol>
+      <a [href]="linkWhatsapp()" target="_blank" class="footer__whatsapp">
+        Escribinos por WhatsApp
+      </a>
+    </div>
+
+    <div class="footer__columna">
+      <h3>Envíos</h3>
+      <p class="footer__texto">
+        Por ahora hacemos envíos dentro de Catamarca capital y alrededores.
+        Consultanos por tu zona antes de confirmar el pedido.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="footer__barra">
+    <p>© {{ anioActual }} Tienda de Minerales</p>
+  </div>
+</footer>

@@ -1,0 +1,205 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  color: var(--cuarzo);
+  font-family: var(--fuente-cuerpo);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.diccionario {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 3rem 2rem 5rem;
+
+  @media (max-width: 600px) {
+    padding: 2rem 1.25rem 3rem;
+  }
+}
+
+//  Encabezado 
+.diccionario__encabezado {
+  text-align: center;
+  margin-bottom: 2.5rem;
+
+  h1 {
+    font-family: var(--fuente-display);
+    font-size: 2.25rem;
+    font-weight: 500;
+    margin: 0 0 0.75rem;
+  }
+
+  p {
+    color: var(--ceniza);
+    font-size: 0.95rem;
+    max-width: 32rem;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+  }
+}
+
+.diccionario__buscador {
+  width: 100%;
+  max-width: 26rem;
+  background: var(--piedra);
+  border: 1px solid var(--piedra-borde);
+  border-radius: 999px;
+  color: var(--cuarzo);
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.9rem;
+  padding: 0.75rem 1.25rem;
+
+  &::placeholder {
+    color: var(--ceniza);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--agata);
+  }
+}
+
+// Filtro alfabético 
+.abecedario {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.abecedario__letra {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--piedra-borde);
+  background: transparent;
+  color: var(--cuarzo);
+  font-family: var(--fuente-mono);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover:not(:disabled) {
+    border-color: var(--malaquita);
+    color: var(--malaquita-hover);
+  }
+}
+
+.abecedario__letra--activa {
+  background: var(--agata);
+  border-color: var(--agata);
+  color: var(--onix);
+  font-weight: 700;
+
+  &:hover {
+    background: var(--agata-hover);
+    border-color: var(--agata-hover);
+    color: var(--onix);
+  }
+}
+
+.abecedario__letra--deshabilitada {
+  color: var(--piedra-borde);
+  cursor: default;
+  opacity: 0.4;
+}
+
+.diccionario__limpiar {
+  display: block;
+  margin: 0 auto 2.5rem;
+  background: none;
+  border: none;
+  color: var(--agata);
+  font-size: 0.85rem;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--agata-hover);
+    text-decoration: underline;
+  }
+}
+
+// Lista de entradas 
+.diccionario__vacio {
+  text-align: center;
+  color: var(--ceniza);
+  padding: 3rem 1rem;
+}
+
+.diccionario__lista {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.entrada {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 1.5rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--piedra-borde);
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: 72px 1fr;
+    gap: 1rem;
+  }
+}
+
+.entrada__marco {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  padding: 3px;
+
+  &--agata {
+    background: var(--agata);
+  }
+
+  &--malaquita {
+    background: var(--malaquita);
+  }
+
+  @media (max-width: 560px) {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+.entrada__imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid var(--onix);
+  display: block;
+}
+
+.entrada__nombre {
+  font-family: var(--fuente-display);
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin: 0 0 0.25rem;
+}
+
+.entrada__significado {
+  font-family: var(--fuente-mono);
+  font-size: 0.8rem;
+  color: var(--malaquita-hover);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.6rem;
+}
+
+.entrada__descripcion {
+  color: var(--ceniza);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  margin: 0;
+}

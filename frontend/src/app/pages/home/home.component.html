@@ -48,31 +48,26 @@
   </div>
 </section>
 
-<section class="detalle" id="destacada">
-  <div class="detalle__marco" [class]="'detalle__marco--' + destacada().colorTag">
-    <img [src]="destacada().imagen" [alt]="destacada().nombre" class="detalle__imagen" />
+<section class="banner-diccionario">
+  <div class="banner-diccionario__contenido">
+    <p class="banner-diccionario__eyebrow">¿Sabías que...?</p>
+    <h2 class="banner-diccionario__titulo">
+      Cada piedra tiene su propio significado
+    </h2>
+    <p class="banner-diccionario__texto">
+      Desde la protección hasta el amor propio, cada variedad carga con
+      creencias y facultades energéticas que se transmiten hace siglos.
+    </p>
+    <a routerLink="/diccionario" class="btn btn--primario">
+      Descubrir significados
+    </a>
   </div>
 
-  <div class="detalle__info">
-    <p class="detalle__variedad">{{ destacada().variedad }}</p>
-    <h2 class="detalle__nombre">{{ destacada().nombre }}</h2>
-    <p class="detalle__precio">${{ destacada().precio }} / unidad</p>
-
-    <dl class="detalle__specs">
-      <div>
-        <dt>Calibre</dt>
-        <dd>{{ destacada().calibreMm }}mm</dd>
-      </div>
-      <div>
-        <dt>Origen</dt>
-        <dd>Corte y pulido artesanal</dd>
-      </div>
-    </dl>
-
-    <p class="detalle__descripcion">{{ destacada().descripcion }}</p>
-
-    <button class="btn btn--primario" (click)="pedidoService.agregarAlPedido(destacada())">
-      Agregar al pedido
-    </button>
+  <div class="banner-diccionario__marco">
+    <img
+      src="imagenes/variaspiedras.jpg"
+      alt="Corte de piedra ágata"
+      class="banner-diccionario__imagen"
+    />
   </div>
 </section>

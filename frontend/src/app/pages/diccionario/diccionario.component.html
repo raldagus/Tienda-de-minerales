@@ -1,0 +1,61 @@
+<div class="diccionario">
+
+  <div class="diccionario__encabezado">
+    <h1>Diccionario de piedras</h1>
+    <p>
+      Significados tradicionales asociados a cada piedra, según la litoterapia
+      y las creencias populares.
+    </p>
+
+    <input
+      type="text"
+      class="diccionario__buscador"
+      placeholder="Buscar por nombre o significado…"
+      [value]="busqueda()"
+      (input)="actualizarBusqueda($any($event.target).value)"
+    />
+  </div>
+
+  <div class="abecedario">
+    @for (letra of abecedario; track letra) {
+      <button
+        class="abecedario__letra"
+        [class.abecedario__letra--activa]="letraActiva() === letra"
+        [class.abecedario__letra--deshabilitada]="!letrasDisponibles().has(letra)"
+        [disabled]="!letrasDisponibles().has(letra)"
+        (click)="seleccionarLetra(letra)"
+      >
+        {{ letra }}
+      </button>
+    }
+  </div>
+
+  @if (letraActiva() || busqueda()) {
+    <button class="diccionario__limpiar" (click)="limpiarFiltros()">
+      Limpiar filtros
+    </button>
+  }
+
+  @if (piedrasFiltradas().length === 0) {
+    <div class="diccionario__vacio">
+      <p>No encontramos piedras que coincidan.</p>
+    </div>
+  } @else {
+    <div class="diccionario__lista">
+      @for (piedra of piedrasFiltradas(); track piedra.id) {
+        <article class="entrada">
+          <div class="entrada__marco" [class]="'entrada__marco--' + piedra.colorTag">
+            <img [src]="piedra.imagen" [alt]="piedra.nombre" class="entrada__imagen" />
+          </div>
+
+          <div class="entrada__contenido">
+            <h2 class="entrada__nombre">{{ piedra.nombre }}</h2>
+            <p class="entrada__significado">{{ piedra.significado }}</p>
+            <p class="entrada__descripcion">{{ piedra.descripcion }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  }
+
+</div>

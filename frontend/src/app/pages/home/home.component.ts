@@ -14,8 +14,6 @@ import { PedidoService } from '../../services/pedido.service';
 export class HomeComponent {
   protected pedidoService = inject(PedidoService);
 
-  // --- Datos del catálogo ---
-  // Reemplazar `imagen` por las rutas reales en /assets/piedras/
   catalogo = signal<Piedra[]>([
     {
       id: 'agata-azul-20',
@@ -59,6 +57,5 @@ export class HomeComponent {
     },
   ]);
 
-  // Pieza destacada (sección "detalle" tipo la referencia)
   destacada = computed(() => this.catalogo()[0]);
 }
