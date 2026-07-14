@@ -91,17 +91,25 @@ export class DiccionarioComponent {
 
   piedrasFiltradas = computed(() => {
     const letra = this.letraActiva();
-    const texto = this.busqueda().trim().toLowerCase();
+    const texto = this.normalizar(this.busqueda().trim());
 
     return this.piedras()
       .filter(p => !letra || p.nombre.toUpperCase().startsWith(letra))
       .filter(p =>
         !texto ||
-        p.nombre.toLowerCase().includes(texto) ||
-        p.significado.toLowerCase().includes(texto)
+        this.normalizar(p.nombre).includes(texto) ||
+        this.normalizar(p.significado).includes(texto)
       )
       .sort((a, b) => a.nombre.localeCompare(b.nombre));
   });
+
+  // Quita acentos y pasa a minúsculas para que la búsqueda ignore tildes
+  private normalizar(texto: string): string {
+    return texto
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '');
+  }
 
   seleccionarLetra(letra: string): void {
     this.letraActiva.set(this.letraActiva() === letra ? null : letra);

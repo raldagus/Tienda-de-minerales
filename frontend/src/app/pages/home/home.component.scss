@@ -2,6 +2,8 @@
 :host {
   display: block;
   min-height: 100vh;
+  background: #fff;
+  color: var(--onix);
 }
 
 // Botones (compartidos)
@@ -41,13 +43,13 @@
 
 .btn--secundario {
   background: transparent;
-  color: var(--cuarzo);
-  border: 1px solid var(--piedra-borde);
+  color: var(--onix);
+  border: 1px solid var(--borde-tenue);
   width: 100%;
 
   &:hover {
     border-color: var(--malaquita);
-    color: var(--malaquita-hover);
+    color: var(--malaquita);
   }
 }
 
@@ -122,6 +124,7 @@
   font-size: clamp(2.5rem, 5vw, 4rem);
   line-height: 1.05;
   font-weight: 500;
+  color: var(--cuarzo);
   margin: 0 0 1.5rem;
 }
 
@@ -154,7 +157,7 @@
   }
 
   p {
-    color: var(--ceniza);
+    color: var(--texto-tenue);
     margin: 0;
   }
 }
@@ -211,7 +214,7 @@
 .tarjeta__variedad {
   font-family: var(--fuente-mono);
   font-size: 0.8rem;
-  color: var(--ceniza);
+  color: var(--texto-tenue);
   margin: 0;
 }
 
@@ -222,25 +225,35 @@
   margin: 0 0 0.75rem;
 }
 
-// Banner → Diccionario de significados
+// diccionario de significados
 .banner-diccionario {
-  display: grid;
-  grid-template-columns: 1fr 340px;
-  gap: 3.5rem;
+  display: flex;
+  justify-content: center;
   align-items: center;
+  gap: 3.5rem;
   padding: 4rem;
-  background: var(--piedra);
+  background: #fff;
+  color: var(--onix);
+  text-align: left;
+  
 
   @media (max-width: 900px) {
-    grid-template-columns: 1fr;
+    flex-direction: column;
     padding: 3rem 1.5rem;
-    text-align: center;
+    gap: 2rem;
   }
+}
+
+.banner-diccionario__contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: rem;
 }
 
 .banner-diccionario__eyebrow {
   font-family: var(--fuente-mono);
-  color: var(--malaquita-hover);
+  color: var(--malaquita);
   font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -255,24 +268,19 @@
 }
 
 .banner-diccionario__texto {
-  color: var(--ceniza);
+  color: var(--texto-tenue);
   line-height: 1.6;
   max-width: 32rem;
-  margin: 0 0 2rem;
-
-  @media (max-width: 900px) {
-    margin-left: auto;
-    margin-right: auto;
-  }
+  margin: 6;
 }
 
 .banner-diccionario__marco {
   width: 100%;
   max-width: 300px;
+  flex-shrink: 0;
   aspect-ratio: 1;
   border-radius: 50%;
   padding: 6px;
-  margin: 0 auto;
   background: conic-gradient(from 180deg, var(--agata), var(--malaquita), var(--agata));
 }
 
@@ -281,6 +289,6 @@
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  border: 6px solid var(--piedra);
+  border: 6px solid #fff;
   display: block;
 }

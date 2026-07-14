@@ -2,6 +2,8 @@
 :host {
   display: block;
   min-height: 100vh;
+  background: #fff;
+  color: var(--onix);
 }
 
 .btn {
@@ -25,13 +27,13 @@
 
 .btn--secundario {
   background: transparent;
-  color: var(--cuarzo);
-  border: 1px solid var(--piedra-borde);
+  color: var(--onix);
+  border: 1px solid var(--borde-tenue);
   width: 100%;
 
   &:hover {
     border-color: var(--malaquita);
-    color: var(--malaquita-hover);
+    color: var(--malaquita);
   }
 }
 
@@ -59,13 +61,14 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  background: var(--piedra);
+  border: 1px solid var(--piedra-borde);
+  border-radius: 16px;
+  padding: 1.5rem;
+  color: var(--cuarzo);
 
   @media (max-width: 900px) {
     position: static;
-    border: 1px solid var(--piedra-borde);
-    border-radius: 16px;
-    padding: 1.5rem;
-    background: var(--piedra);
   }
 }
 
@@ -197,7 +200,7 @@
   p {
     font-family: var(--fuente-mono);
     font-size: 0.85rem;
-    color: var(--ceniza);
+    color: var(--texto-tenue);
     margin: 0;
   }
 }
@@ -209,7 +212,7 @@
   gap: 1.25rem;
   padding: 4rem 1rem;
   text-align: center;
-  color: var(--ceniza);
+  color: var(--texto-tenue);
 
   .btn {
     width: auto;
@@ -263,7 +266,7 @@
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--malaquita-hover);
+  color: var(--malaquita);
 }
 
 .tarjeta__nombre {
@@ -276,7 +279,7 @@
 .tarjeta__variedad {
   font-family: var(--fuente-mono);
   font-size: 0.78rem;
-  color: var(--ceniza);
+  color: var(--texto-tenue);
   margin: 0;
 }
 

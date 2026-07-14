@@ -1,0 +1,84 @@
+<div class="sobre-nosotros">
+
+  <header class="sobre-nosotros__encabezado">
+    <p class="sobre-nosotros__eyebrow">Sobre nosotros</p>
+    <h1 class="sobre-nosotros__titulo">El oficio detrás de cada piedra</h1>
+  </header>
+
+  <section class="carrusel">
+    <div class="carrusel__marco">
+      @for (foto of fotos(); track foto.src; let i = $index) {
+        <figure
+          class="carrusel__slide"
+          [class.carrusel__slide--activo]="i === indiceActual()"
+        >
+          <img [src]="foto.src" [alt]="foto.alt" class="carrusel__imagen" />
+          <figcaption class="carrusel__pie">{{ foto.pie }}</figcaption>
+        </figure>
+      }
+
+      <button class="carrusel__flecha carrusel__flecha--izq" (click)="anterior()" aria-label="Anterior">
+        ‹
+      </button>
+      <button class="carrusel__flecha carrusel__flecha--der" (click)="siguiente()" aria-label="Siguiente">
+        ›
+      </button>
+    </div>
+
+    <div class="carrusel__puntos">
+      @for (foto of fotos(); track foto.src; let i = $index) {
+        <button
+          class="carrusel__punto"
+          [class.carrusel__punto--activo]="i === indiceActual()"
+          (click)="irA(i)"
+          [attr.aria-label]="'Ir a foto ' + (i + 1)"
+        ></button>
+      }
+    </div>
+  </section>
+
+  <section class="historia">
+    <p>
+      Soy lapidador catamarqueño con más de 5 años de experiencia trabajando
+      la piedra. Todo lo que ves en el catálogo pasó por un proceso completo
+      en el taller: selección, corte, calibrado y pulido, pieza por pieza,
+      hecho a mano.
+    </p>
+
+    <p>
+      Empecé en este oficio por pura curiosidad —ver qué había adentro de una
+      piedra en bruto— y con el tiempo se convirtió en mi trabajo. Cada corte
+      es distinto: ninguna ágata sale igual a otra, y esa parte de sorpresa
+      es la que más disfruto del proceso.
+    </p>
+
+    <p>
+      Trabajo tanto piedras calibradas, listas para engarzar en joyería, como
+      piezas en bruto para quienes buscan algo más natural y sin intervenir.
+      Todo el proceso es artesanal: no hay producción en serie, cada pieza
+      lleva su tiempo y su atención particular.
+    </p>
+
+    <p>
+      Si tenés dudas sobre alguna piedra, su significado o qué calibre se
+      ajusta mejor a lo que estás buscando, podés escribirme directamente
+      y con gusto te ayudo a elegir.
+    </p>
+  </section>
+
+  <section class="datos">
+    <div class="datos__item">
+      <span class="datos__numero">5+</span>
+      <span class="datos__etiqueta">Años de experiencia</span>
+    </div>
+    <div class="datos__item">
+      <span class="datos__numero">100%</span>
+      <span class="datos__etiqueta">Proceso artesanal</span>
+    </div>
+    <div class="datos__item">
+      <span class="datos__numero">Única</span>
+      <span class="datos__etiqueta">Cada pieza es irrepetible</span>
+    </div>
+  </section>
+
+</div>
