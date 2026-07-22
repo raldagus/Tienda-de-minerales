@@ -11,8 +11,7 @@
   </a>
 
   <nav class="header__nav header__nav--right">
-    <a href="#contacto">Contacto</a>
-    <button class="header__cart" (click)="pedidoService.togglePanel()">
+      <button class="header__cart" (click)="pedidoService.togglePanel()">
       Pedido
       @if (pedidoService.cantidadItems() > 0) {
         <span class="header__cart-badge">{{ pedidoService.cantidadItems() }}</span>

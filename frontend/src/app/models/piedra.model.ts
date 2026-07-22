@@ -1,4 +1,4 @@
-export type Variedad = 'Cuarzo' | 'Turmalina' | 'Ágata' | 'Otras piedras';
+export type Variedad = 'Cuarzo' | 'Turmalina' | 'Ágata' | 'Labradorita' | 'Lapislazuli' | 'Piedra de la luna' | 'Obsidiana' | 'Opalo' | 'Otras piedras';
 export type Tipo = 'calibrada' | 'bruto';
 
 export interface Piedra {

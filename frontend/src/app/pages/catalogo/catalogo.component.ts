@@ -2,7 +2,8 @@ import { Component, signal, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Piedra, Variedad, Tipo } from '../../models/piedra.model';
-import { PedidoService } from '../../services/pedido.service';
+import { PedidoService } from '../../services/pedido.service'
+import { PiedraService } from '../../services/piedra.service';
 
 @Component({
   selector: 'app-catalogo',
@@ -13,27 +14,17 @@ import { PedidoService } from '../../services/pedido.service';
 })
 export class CatalogoComponent {
   protected pedidoService = inject(PedidoService);
+  private piedraService = inject(PiedraService);
+  
+  piedras = this.piedraService.piedras;
 
-  piedras = signal<Piedra[]>([
-    { id: 'agata-azul-20', nombre: 'Ágata Azul', variedad: 'Ágata', tipo: 'calibrada', calibreMm: 20, precio: 4500, imagen: 'imagenes/agata-azul.jpg', colorTag: 'agata' },
-    { id: 'agata-verde-18', nombre: 'Ágata Verde', variedad: 'Ágata', tipo: 'calibrada', calibreMm: 18, precio: 4200, imagen: 'imagenes/agata-verde.jpg', colorTag: 'malaquita' },
-    { id: 'agata-bruto-01', nombre: 'Ágata en Bruto', variedad: 'Ágata', tipo: 'bruto', precio: 2800, imagen: 'imagenes/agata-bruto.jpg', colorTag: 'malaquita' },
-    { id: 'cuarzo-blanco-22', nombre: 'Cuarzo Blanco', variedad: 'Cuarzo', tipo: 'calibrada', calibreMm: 22, precio: 3800, imagen: 'imagenes/cuarzo-blanco.jpg', colorTag: 'agata' },
-    { id: 'cuarzo-rosa-bruto', nombre: 'Cuarzo Rosa en Bruto', variedad: 'Cuarzo', tipo: 'bruto', precio: 3100, imagen: 'imagenes/cuarzo-rosa-bruto.jpg', colorTag: 'malaquita' },
-    { id: 'turmalina-negra-16', nombre: 'Turmalina Negra', variedad: 'Turmalina', tipo: 'calibrada', calibreMm: 16, precio: 5200, imagen: 'imagenes/turmalina-negra.jpg', colorTag: 'agata' },
-    { id: 'turmalina-bruto-01', nombre: 'Turmalina en Bruto', variedad: 'Turmalina', tipo: 'bruto', precio: 3900, imagen: 'imagenes/turmalina-bruto.jpg', colorTag: 'malaquita' },
-    { id: 'amatista-24', nombre: 'Amatista', variedad: 'Otras piedras', tipo: 'calibrada', calibreMm: 24, precio: 4900, imagen: 'imagenes/amatista.jpg', colorTag: 'agata' },
-    { id: 'citrino-bruto', nombre: 'Citrino en Bruto', variedad: 'Otras piedras', tipo: 'bruto', precio: 2500, imagen: 'imagenes/citrino-bruto.jpg', colorTag: 'malaquita' },
-    { id: 'agata-fucsia-19', nombre: 'Ágata Fucsia', variedad: 'Ágata', tipo: 'calibrada', calibreMm: 19, precio: 4700, imagen: 'imagenes/agata-fucsia.jpg', colorTag: 'malaquita' },
-  ]);
-
-  readonly variedades: Variedad[] = ['Cuarzo', 'Turmalina', 'Ágata', 'Otras piedras'];
+  readonly variedades: Variedad[] = ['Cuarzo', 'Turmalina', 'Ágata', 'Labradorita', 'Lapislazuli', 'Piedra de la luna', 'Obsidiana', 'Opalo', 'Otras piedras'];
   readonly tipos: { valor: Tipo; etiqueta: string }[] = [
     { valor: 'calibrada', etiqueta: 'Calibradas' },
     { valor: 'bruto', etiqueta: 'En bruto' },
   ];
 
-  // --- Estado de filtros ---
+  // Estado de filtros 
   variedadesSeleccionadas = signal<Set<Variedad>>(new Set());
   tiposSeleccionados = signal<Set<Tipo>>(new Set());
 

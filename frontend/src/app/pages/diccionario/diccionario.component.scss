@@ -1,7 +1,8 @@
 :host {
   display: block;
   min-height: 100vh;
-  color: var(--cuarzo);
+  background: #fff;
+  color: var(--onix);
   font-family: var(--fuente-cuerpo);
 }
 
@@ -32,7 +33,7 @@
   }
 
   p {
-    color: var(--ceniza);
+    color: var(--texto-tenue);
     font-size: 0.95rem;
     max-width: 32rem;
     margin: 0 auto 1.5rem;
@@ -43,16 +44,16 @@
 .diccionario__buscador {
   width: 100%;
   max-width: 26rem;
-  background: var(--piedra);
-  border: 1px solid var(--piedra-borde);
+  background: #fff;
+  border: 1px solid var(--borde-tenue);
   border-radius: 999px;
-  color: var(--cuarzo);
+  color: var(--onix);
   font-family: var(--fuente-cuerpo);
   font-size: 0.9rem;
   padding: 0.75rem 1.25rem;
 
   &::placeholder {
-    color: var(--ceniza);
+    color: var(--texto-tenue);
   }
 
   &:focus {
@@ -74,9 +75,9 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  border: 1px solid var(--piedra-borde);
+  border: 1px solid var(--borde-tenue);
   background: transparent;
-  color: var(--cuarzo);
+  color: var(--onix);
   font-family: var(--fuente-mono);
   font-size: 0.85rem;
   cursor: pointer;
@@ -84,7 +85,7 @@
 
   &:hover:not(:disabled) {
     border-color: var(--malaquita);
-    color: var(--malaquita-hover);
+    color: var(--malaquita);
   }
 }
 
@@ -102,7 +103,7 @@
 }
 
 .abecedario__letra--deshabilitada {
-  color: var(--piedra-borde);
+  color: var(--borde-tenue);
   cursor: default;
   opacity: 0.4;
 }
@@ -125,7 +126,7 @@
 // Lista de entradas 
 .diccionario__vacio {
   text-align: center;
-  color: var(--ceniza);
+  color: var(--texto-tenue);
   padding: 3rem 1rem;
 }
 
@@ -140,7 +141,7 @@
   grid-template-columns: 96px 1fr;
   gap: 1.5rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid var(--piedra-borde);
+  border-bottom: 1px solid var(--borde-tenue);
 
   &:last-child {
     border-bottom: none;
@@ -177,7 +178,7 @@
   height: 100%;
   object-fit: cover;
   border-radius: 50%;
-  border: 3px solid var(--onix);
+  border: 3px solid #fff;
   display: block;
 }
 
@@ -191,14 +192,14 @@
 .entrada__significado {
   font-family: var(--fuente-mono);
   font-size: 0.8rem;
-  color: var(--malaquita-hover);
+  color: var(--malaquita);
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin: 0 0 0.6rem;
 }
 
 .entrada__descripcion {
-  color: var(--ceniza);
+  color: var(--texto-tenue);
   font-size: 0.92rem;
   line-height: 1.65;
   margin: 0;

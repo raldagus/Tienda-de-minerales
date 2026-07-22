@@ -32,7 +32,7 @@
   <div class="catalogo__grid">
     @for (piedra of catalogo(); track piedra.id) {
       <article class="tarjeta">
-        <div class="tarjeta__marco" [class]="'tarjeta__marco--' + piedra.colorTag">
+        <div class="tarjeta__marco">
           <img [src]="piedra.imagen" [alt]="piedra.nombre" class="tarjeta__imagen" />
         </div>
 
@@ -58,7 +58,7 @@
       Desde la protección hasta el amor propio, cada variedad carga con
       creencias y facultades energéticas que se transmiten hace siglos.
     </p>
-    <a routerLink="/diccionario" class="btn btn--primario">
+    <a routerLink="/diccionario" class="btn btn--primario btn-banner-dic">
       Descubrir significados
     </a>
   </div>
