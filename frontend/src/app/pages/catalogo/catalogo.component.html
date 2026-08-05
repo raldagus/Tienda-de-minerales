@@ -79,13 +79,13 @@
         @for (piedra of piedrasFiltradas(); track piedra.id) {
           <article class="tarjeta">
             <div class="tarjeta__marco">
-              <img [src]="piedra.imagen" [alt]="piedra.nombre" class="tarjeta__imagen" />
+              <img [src]="piedra.imagen" [alt]="piedra.descripcion" class="tarjeta__imagen" />
             </div>
 
-            <span class="tarjeta__tipo">{{ piedra.tipo === 'calibrada' ? 'Calibrada' : 'En bruto' }}</span>
-            <h3 class="tarjeta__nombre">{{ piedra.nombre }}</h3>
+            <span class="tarjeta__tipo">{{ piedra.categoriaNombre === 'calibrada' ? 'Calibrada' : 'En bruto' }}</span>
+            <h3 class="tarjeta__nombre">{{ piedra.descripcion }}</h3>
             <p class="tarjeta__variedad">
-              {{ piedra.variedad }}{{ piedra.calibreMm ? ' · ' + piedra.calibreMm + 'mm' : '' }}
+              {{ piedra.nombre }}{{ piedra.calibreMm ? ' · ' + piedra.calibreMm + 'mm' : '' }}
             </p>
             <p class="tarjeta__precio">${{ piedra.precio }}</p>
 

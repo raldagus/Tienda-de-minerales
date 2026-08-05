@@ -3,14 +3,12 @@ export type Tipo = 'calibrada' | 'bruto';
 
 export interface Piedra {
   id: string;
-  nombre: string;
-  variedad: Variedad;
-  tipo?: Tipo;
+  nombre: Variedad;
+  descripcion: string;
+  categoriaNombre?: Tipo;
   calibreMm?: number;
   precio: number;
   imagen: string;
-  colorTag: 'agata' | 'malaquita';
-  descripcion?: string;
 }
 
 export interface ItemPedido {

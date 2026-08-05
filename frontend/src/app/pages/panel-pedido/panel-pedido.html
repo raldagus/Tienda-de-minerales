@@ -23,7 +23,7 @@
       @for (item of pedidoService.pedido(); track item.piedra.id) {
         <li class="panel-pedido__item">
           <span>
-            {{ item.cantidad }}x {{ item.piedra.nombre }}
+            {{ item.cantidad }}x {{ item.piedra.descripcion }}
             @if (item.piedra.calibreMm) {
               ({{ item.piedra.calibreMm }}mm)
             }

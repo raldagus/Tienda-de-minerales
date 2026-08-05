@@ -33,11 +33,11 @@
     @for (piedra of catalogo(); track piedra.id) {
       <article class="tarjeta">
         <div class="tarjeta__marco">
-          <img [src]="piedra.imagen" [alt]="piedra.nombre" class="tarjeta__imagen" />
+          <img [src]="piedra.imagen" [alt]="piedra.descripcion" class="tarjeta__imagen" />
         </div>
 
-        <h3 class="tarjeta__nombre">{{ piedra.nombre }}</h3>
-        <p class="tarjeta__variedad">{{ piedra.variedad }} · {{ piedra.calibreMm }}mm</p>
+        <h3 class="tarjeta__nombre">{{ piedra.descripcion }}</h3>
+        <p class="tarjeta__variedad">{{ piedra.nombre }} · {{ piedra.calibreMm }}mm</p>
         <p class="tarjeta__precio">${{ piedra.precio }}</p>
 
         <button class="btn btn--secundario" (click)="pedidoService.agregarAlPedido(piedra)">

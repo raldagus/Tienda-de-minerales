@@ -48,7 +48,7 @@ export class PedidoService {
   linkPedidoWhatsapp(): string {
     const lineas = this.pedido().map((i) => {
       const calibre = i.piedra.calibreMm ? ` (${i.piedra.calibreMm}mm)` : '';
-      return `• ${i.cantidad}x ${i.piedra.nombre}${calibre} - $${i.piedra.precio * i.cantidad}`;
+      return `• ${i.cantidad}x ${i.piedra.descripcion}${calibre} - $${i.piedra.precio * i.cantidad}`;
     });
     const mensaje = `Hola! Quiero confirmar este pedido:\n\n${lineas.join('\n')}\n\nTotal: $${this.totalPedido()}`;
 
