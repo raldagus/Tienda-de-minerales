@@ -37,7 +37,7 @@
         </div>
 
         <h3 class="tarjeta__nombre">{{ piedra.nombre }}</h3>
-        <p class="tarjeta__variedad">{{ piedra.variedad }} · {{ piedra.calibreMm }}mm</p>
+        <p class="tarjeta__variedad">{{ piedra.descripcion }} · {{ piedra.calibreMm }}mm</p>
         <p class="tarjeta__precio">${{ piedra.precio }}</p>
 
         <button class="btn btn--secundario" (click)="pedidoService.agregarAlPedido(piedra)">
