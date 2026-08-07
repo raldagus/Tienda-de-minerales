@@ -1,0 +1,6 @@
+bin/
+obj/
+.vs/
+*.user
+Backend/wwwroot/uploads/productos/*
+!Backend/wwwroot/uploads/productos/.gitkeep
