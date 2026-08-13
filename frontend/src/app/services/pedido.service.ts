@@ -1,5 +1,5 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { Piedra, ItemPedido } from '../models/piedra.model';
+import { Producto, ItemPedido } from '../models/producto.model';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
@@ -9,14 +9,14 @@ export class PedidoService {
   estaAbierto = signal(false);
 
   totalPedido = computed(() =>
-    this.pedido().reduce((acc, item) => acc + item.piedra.precio * item.cantidad, 0)
+    this.pedido().reduce((acc, item) => acc + item.piedra.precioUnitario * item.cantidad, 0)
   );
 
   cantidadItems = computed(() =>
     this.pedido().reduce((acc, item) => acc + item.cantidad, 0)
   );
 
-  agregarAlPedido(piedra: Piedra): void {
+  agregarAlPedido(piedra: Producto): void {
     const actual = this.pedido();
     const existente = actual.find((i) => i.piedra.id === piedra.id);
 
@@ -48,7 +48,7 @@ export class PedidoService {
   linkPedidoWhatsapp(): string {
     const lineas = this.pedido().map((i) => {
       const calibre = i.piedra.calibreMm ? ` (${i.piedra.calibreMm}mm)` : '';
-      return `• ${i.cantidad}x ${i.piedra.nombre}${calibre} - $${i.piedra.precio * i.cantidad}`;
+      return `• ${i.cantidad}x ${i.piedra.nombre}${calibre} - $${i.piedra.precioUnitario * i.cantidad}`;
     });
     const mensaje = `Hola! Quiero confirmar este pedido:\n\n${lineas.join('\n')}\n\nTotal: $${this.totalPedido()}`;
 
