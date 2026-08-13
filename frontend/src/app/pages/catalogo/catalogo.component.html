@@ -79,7 +79,7 @@
         @for (piedra of piedrasFiltradas(); track piedra.id) {
           <article class="tarjeta">
             <div class="tarjeta__marco">
-              <img [src]="piedra.imagen" [alt]="piedra.nombre" class="tarjeta__imagen" />
+              <img [src]="productoService.urlImagen(piedra)" [alt]="piedra.nombre" class="tarjeta__imagen" />
             </div>
 
             <span class="tarjeta__tipo">{{ piedra.categoriaNombre === 'calibrada' ? 'Calibrada' : 'En bruto' }}</span>
@@ -87,7 +87,7 @@
             <p class="tarjeta__variedad">
               {{ piedra.descripcion }}{{ piedra.calibreMm ? ' · ' + piedra.calibreMm + 'mm' : '' }}
             </p>
-            <p class="tarjeta__precio">${{ piedra.precio }}</p>
+            <p class="tarjeta__precio">${{ piedra.precioUnitario }}</p>
 
             <button class="btn btn--secundario" (click)="pedidoService.agregarAlPedido(piedra)">
               Agregar al pedido

@@ -1,9 +1,9 @@
-import { Component, signal, computed, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, computed, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Piedra, Variedad, Tipo } from '../../models/piedra.model';
+import { Variedad, Tipo } from '../../models/producto.model';
 import { PedidoService } from '../../services/pedido.service'
-import { PiedraService } from '../../services/piedra.service';
+import { ProductoService } from '../../services/producto.service';
 
 @Component({
   selector: 'app-catalogo',
@@ -12,11 +12,18 @@ import { PiedraService } from '../../services/piedra.service';
   templateUrl: './catalogo.component.html',
   styleUrl: './catalogo.component.scss',
 })
-export class CatalogoComponent {
+export class CatalogoComponent implements OnInit {
   protected pedidoService = inject(PedidoService);
-  private piedraService = inject(PiedraService);
-  
-  piedras = this.piedraService.piedras;
+  protected productoService = inject(ProductoService);
+  private platformId = inject(PLATFORM_ID);
+
+  piedras = this.productoService.piedras;
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.productoService.cargar();
+    }
+  }
 
   readonly variedades: Variedad[] = ['Cuarzo', 'Turmalina', 'Ágata', 'Labradorita', 'Lapislazuli', 'Piedra de la luna', 'Obsidiana', 'Opalo', 'Otras piedras'];
   readonly tipos: { valor: Tipo; etiqueta: string }[] = [
@@ -31,8 +38,15 @@ export class CatalogoComponent {
   precioMin = signal<number | null>(null);
   precioMax = signal<number | null>(null);
 
-  precioMinCatalogo = computed(() => Math.min(...this.piedras().map((p) => p.precio)));
-  precioMaxCatalogo = computed(() => Math.max(...this.piedras().map((p) => p.precio)));
+  precioMinCatalogo = computed(() => {
+  const precios = this.piedras().map((p) => p.precioUnitario);
+  return precios.length ? Math.min(...precios) : 0;
+});
+
+precioMaxCatalogo = computed(() => {
+  const precios = this.piedras().map((p) => p.precioUnitario);
+  return precios.length ? Math.max(...precios) : 0;
+});
 
   piedrasFiltradas = computed(() => {
     const variedades = this.variedadesSeleccionadas();
@@ -43,8 +57,8 @@ export class CatalogoComponent {
     return this.piedras().filter((p) => {
       const pasaVariedad = variedades.size === 0 || variedades.has(p.descripcion);
       const pasaTipo = tipos.size === 0 || (p.categoriaNombre !== undefined && tipos.has(p.categoriaNombre));
-      const pasaMin = min === null || p.precio >= min;
-      const pasaMax = max === null || p.precio <= max;
+      const pasaMin = min === null || p.precioUnitario >= min;
+      const pasaMax = max === null || p.precioUnitario <= max;
       return pasaVariedad && pasaTipo && pasaMin && pasaMax;
     });
   });

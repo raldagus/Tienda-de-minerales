@@ -28,7 +28,7 @@
               ({{ item.piedra.calibreMm }}mm)
             }
           </span>
-          <span>${{ item.piedra.precio * item.cantidad }}</span>
+          <span>${{ item.piedra.precioUnitario * item.cantidad }}</span>
           <button
             class="panel-pedido__quitar"
             (click)="pedidoService.quitarDelPedido(item.piedra.id)"

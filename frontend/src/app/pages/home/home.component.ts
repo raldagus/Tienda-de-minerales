@@ -1,8 +1,8 @@
-import { Component, signal, computed, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PedidoService } from '../../services/pedido.service';
-import { PiedraService } from '../../services/piedra.service';
+import { ProductoService } from '../../services/producto.service';
 
 @Component({
   selector: 'app-home',
@@ -11,9 +11,16 @@ import { PiedraService } from '../../services/piedra.service';
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   protected pedidoService = inject(PedidoService);
-  private piedraService = inject(PiedraService);
+  protected productoService = inject(ProductoService);
+  private platformId = inject(PLATFORM_ID);
 
-  catalogo = computed(() => this.piedraService.piedras().slice(0, 4));
-   }
+  catalogo = this.productoService.destacadas;
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      this.productoService.cargar();
+    }
+  }
+}
