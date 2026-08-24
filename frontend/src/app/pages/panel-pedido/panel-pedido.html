@@ -20,18 +20,18 @@
     </p>
   } @else {
     <ul class="panel-pedido__lista">
-      @for (item of pedidoService.pedido(); track item.piedra.id) {
+      @for (item of pedidoService.pedido(); track item.producto.id) {
         <li class="panel-pedido__item">
           <span>
-            {{ item.cantidad }}x {{ item.piedra.nombre }}
-            @if (item.piedra.calibreMm) {
-              ({{ item.piedra.calibreMm }}mm)
+            {{ item.cantidad }}x {{ item.producto.nombre }}
+            @if (item.producto.calibreMm) {
+              ({{ item.producto.calibreMm }}mm)
             }
           </span>
-          <span>${{ item.piedra.precioUnitario * item.cantidad }}</span>
+          <span>${{ item.producto.precioUnitario * item.cantidad }}</span>
           <button
             class="panel-pedido__quitar"
-            (click)="pedidoService.quitarDelPedido(item.piedra.id)"
+            (click)="pedidoService.quitarDelPedido(item.producto.id)"
             aria-label="Quitar"
           >
             ✕

@@ -8,5 +8,8 @@ export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'catalogo', component: CatalogoComponent },
     { path: 'diccionario', component: DiccionarioComponent },
-    { path: 'sobre-nosotros', component: SobreNosotrosComponent }
+    { path: 'sobre-nosotros', component: SobreNosotrosComponent },
+    { path: 'producto/:id', loadComponent: () => import('./pages/vista-individual/vista-individual')
+    .then(m => m.VistaIndividual) 
+    }
 ];

@@ -55,8 +55,8 @@ precioMaxCatalogo = computed(() => {
     const max = this.precioMax();
 
     return this.piedras().filter((p) => {
-      const pasaVariedad = variedades.size === 0 || variedades.has(p.descripcion);
-      const pasaTipo = tipos.size === 0 || (p.categoriaNombre !== undefined && tipos.has(p.categoriaNombre));
+      const pasaVariedad = variedades.size === 0 || (p.variedad !== undefined && variedades.has(p.variedad));
+      const pasaTipo = tipos.size === 0 || (p.tipo !== undefined && tipos.has(p.tipo));
       const pasaMin = min === null || p.precioUnitario >= min;
       const pasaMax = max === null || p.precioUnitario <= max;
       return pasaVariedad && pasaTipo && pasaMin && pasaMax;

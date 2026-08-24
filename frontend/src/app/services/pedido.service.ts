@@ -9,28 +9,30 @@ export class PedidoService {
   estaAbierto = signal(false);
 
   totalPedido = computed(() =>
-    this.pedido().reduce((acc, item) => acc + item.piedra.precioUnitario * item.cantidad, 0)
+    this.pedido().reduce((acc, item) => acc + item.producto.precioUnitario * item.cantidad, 0)
   );
 
   cantidadItems = computed(() =>
     this.pedido().reduce((acc, item) => acc + item.cantidad, 0)
   );
 
-  agregarAlPedido(piedra: Producto): void {
+  agregarAlPedido(producto: Producto, cantidad: number = 1): void {
     const actual = this.pedido();
-    const existente = actual.find((i) => i.piedra.id === piedra.id);
+    const existente = actual.find((i) => i.producto.id === producto.id);
 
     if (existente) {
       this.pedido.set(
-        actual.map((i) => (i.piedra.id === piedra.id ? { ...i, cantidad: i.cantidad + 1 } : i))
+        actual.map((i) =>
+          i.producto.id === producto.id ? { ...i, cantidad: i.cantidad + cantidad } : i
+        )
       );
     } else {
-      this.pedido.set([...actual, { piedra, cantidad: 1 }]);
+      this.pedido.set([...actual, { producto, cantidad }]);
     }
   }
 
-  quitarDelPedido(piedraId: string): void {
-    this.pedido.set(this.pedido().filter((i) => i.piedra.id !== piedraId));
+  quitarDelPedido(productoId: number): void {
+    this.pedido.set(this.pedido().filter((i) => i.producto.id !== productoId));
   }
 
   abrirPanel(): void {
@@ -47,8 +49,8 @@ export class PedidoService {
 
   linkPedidoWhatsapp(): string {
     const lineas = this.pedido().map((i) => {
-      const calibre = i.piedra.calibreMm ? ` (${i.piedra.calibreMm}mm)` : '';
-      return `• ${i.cantidad}x ${i.piedra.nombre}${calibre} - $${i.piedra.precioUnitario * i.cantidad}`;
+      const calibre = i.producto.calibreMm ? ` (${i.producto.calibreMm}mm)` : '';
+      return `• ${i.cantidad}x ${i.producto.nombre}${calibre} - $${i.producto.precioUnitario * i.cantidad}`;
     });
     const mensaje = `Hola! Quiero confirmar este pedido:\n\n${lineas.join('\n')}\n\nTotal: $${this.totalPedido()}`;
 

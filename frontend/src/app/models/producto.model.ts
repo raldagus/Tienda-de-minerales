@@ -2,16 +2,20 @@ export type Variedad = 'Cuarzo' | 'Turmalina' | 'Ágata' | 'Labradorita' | 'Lapi
 export type Tipo = 'calibrada' | 'bruto';
 
 export interface Producto {
-  id: string;
+  id: number;
   nombre: string;
-  descripcion: Variedad;
-  categoriaNombre?: Tipo;
-  calibreMm?: number;
+  descripcion: string;
   precioUnitario: number;
-  imagenUrl: string | null;
+  stock: number;
+  calibreMm?: number;
+  idCategoria: number;
+  categoriaNombre: string;
+  tipo?: Tipo;
+  imagenUrl: string;
+  variedad?: Variedad;
 }
 
 export interface ItemPedido {
-  piedra: Producto;
+  producto: Producto;
   cantidad: number;
 }

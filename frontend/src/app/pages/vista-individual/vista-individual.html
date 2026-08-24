@@ -1,0 +1,72 @@
+@if (cargando()) {
+  <div class="estado">
+    <p>Cargando piedra...</p>
+  </div>
+} @else if (error() || !producto()) {
+  <div class="estado">
+    <p>No encontramos esta piedra.</p>
+    <a routerLink="/catalogo" class="volver">Volver al catálogo</a>
+  </div>
+} @else {
+  @let p = producto()!;
+
+  <div class="vista-individual">
+  <nav class="breadcrumb">
+    <a routerLink="/">Inicio</a>
+    <span>/</span>
+    <a routerLink="/catalogo">Catálogo</a>
+    <span>/</span>
+    <span class="actual">{{ p.nombre }}</span>
+  </nav>
+
+  <article class="detalle">
+    <div class="galeria">
+      <img [src]="productoService.urlImagen(p)" [alt]="p.nombre" />
+    </div>
+
+    <div class="info">
+      @if (p.categoriaNombre) {
+        <span class="categoria">{{ p.categoriaNombre }}</span>
+      }
+
+      <h1>{{ p.nombre }}</h1>
+
+      <p class="precio">{{ p.precioUnitario | currency:'ARS':'symbol':'1.2-2' }}</p>
+
+      <ul class="atributos">
+        @if (p.tipo) {
+          <li><span>Tipo</span><strong>{{ p.tipo === 'calibrada' ? 'Calibrada' : 'En bruto' }}</strong></li>
+        }
+        
+        @if (p.calibreMm) {
+          <li><span>Calibre</span><strong>{{ p.calibreMm }} mm</strong></li>
+        }
+      </ul>
+
+      @if (p.descripcion) {
+        <p class="descripcion">{{ p.descripcion }}</p>
+      }
+
+      <p class="stock">{{ p.stock }} en stock</p>
+
+      <p class="lema">Cada piedra es única, no te la pierdas.</p>
+
+      <div class="acciones">
+        <div class="cantidad">
+          <button type="button" (click)="disminuir()" [disabled]="cantidad() <= 1" aria-label="Restar">−</button>
+          <span>{{ cantidad() }}</span>
+          <button type="button" (click)="aumentar()" [disabled]="cantidad() >= maximo()" aria-label="Sumar">+</button>
+        </div>
+
+        <button type="button" class="agregar" (click)="agregarAlPedido()">
+          Agregar al pedido
+        </button>
+      </div>
+
+      @if (agregado()) {
+        <p class="confirmacion">Agregado a tu pedido</p>
+      }
+    </div>
+  </article>
+  </div>
+}
