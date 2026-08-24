@@ -22,6 +22,11 @@
     <ul class="panel-pedido__lista">
       @for (item of pedidoService.pedido(); track item.producto.id) {
         <li class="panel-pedido__item">
+          <img
+            class="panel-pedido__imagen"
+            [src]="productoService.urlImagen(item.producto)"
+            [alt]="item.producto.nombre"
+          />
           <span>
             {{ item.cantidad }}x {{ item.producto.nombre }}
             @if (item.producto.calibreMm) {
