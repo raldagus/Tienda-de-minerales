@@ -90,8 +90,12 @@
             </p>
             <p class="tarjeta__precio">${{ piedra.precioUnitario }}</p>
 
-            <button class="btn btn--secundario" (click)="pedidoService.agregarAlPedido(piedra)">
-              Agregar al pedido
+            <button
+              class="btn btn--secundario"
+              [disabled]="pedidoService.alcanzoStockMaximo(piedra)"
+              (click)="pedidoService.agregarAlPedido(piedra)"
+            >
+              {{ pedidoService.alcanzoStockMaximo(piedra) ? 'Sin stock' : 'Agregar al pedido' }}
             </button>
           </article>
         }

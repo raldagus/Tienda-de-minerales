@@ -19,20 +19,32 @@ export class PedidoService {
   agregarAlPedido(producto: Producto, cantidad: number = 1): void {
     const actual = this.pedido();
     const existente = actual.find((i) => i.producto.id === producto.id);
+    const cantidadActual = existente?.cantidad ?? 0;
+    const cantidadAAgregar = Math.min(cantidad, producto.stock - cantidadActual);
+
+    if (cantidadAAgregar <= 0) return;
 
     if (existente) {
       this.pedido.set(
         actual.map((i) =>
-          i.producto.id === producto.id ? { ...i, cantidad: i.cantidad + cantidad } : i
+          i.producto.id === producto.id ? { ...i, cantidad: i.cantidad + cantidadAAgregar } : i
         )
       );
     } else {
-      this.pedido.set([...actual, { producto, cantidad }]);
+      this.pedido.set([...actual, { producto, cantidad: cantidadAAgregar }]);
     }
   }
 
   quitarDelPedido(productoId: number): void {
     this.pedido.set(this.pedido().filter((i) => i.producto.id !== productoId));
+  }
+
+  cantidadEnPedido(productoId: number): number {
+    return this.pedido().find((i) => i.producto.id === productoId)?.cantidad ?? 0;
+  }
+
+  alcanzoStockMaximo(producto: Producto): boolean {
+    return this.cantidadEnPedido(producto.id) >= producto.stock;
   }
 
   abrirPanel(): void {
