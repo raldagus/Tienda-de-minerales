@@ -136,19 +136,24 @@ Devuelve estado, total e items. Se usa en la Fase 6 para las páginas de resulta
 dotnet add package mercadopago-sdk
 ```
 
-En `appsettings.Development.json` (que ya está excluido del repo) o en User Secrets:
+El `AccessToken` es un secreto: va en User Secrets, mismo patrón que `ConnectionStrings:DefaultConnection`. Parado en `Backend/Backend`:
+
+```bash
+dotnet user-secrets set "MercadoPago:AccessToken" "TEST-..."
+```
+
+`NotificationUrl` y `FrontendUrl` no son secretos (son URLs de configuración local, no credenciales), así que van en `appsettings.Development.json` — y de paso en `appsettings.Development.example.json` con placeholders, para que quede documentado qué hay que completar:
 
 ```json
 {
   "MercadoPago": {
-    "AccessToken": "TEST-...",
     "NotificationUrl": "https://tu-ngrok.ngrok-free.app/api/pagos/webhook",
     "FrontendUrl": "http://localhost:4200"
   }
 }
 ```
 
-En `Program.cs`: setear `MercadoPagoConfig.AccessToken` y registrar el servicio.
+En `Program.cs`: leer `MercadoPago:AccessToken` de la configuración (la combina automáticamente con User Secrets en Development) para setear `MercadoPagoConfig.AccessToken`, y registrar el servicio.
 
 **El Access Token vive solo en el backend.** Nunca en Angular.
 
