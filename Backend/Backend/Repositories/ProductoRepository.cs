@@ -27,6 +27,11 @@ public class ProductoRepository : IProductoRepository
             .Include(p => p.Categoria)
             .FirstOrDefaultAsync(p => p.IdProducto == id && !p.Eliminado);
 
+    public async Task<IEnumerable<Producto>> ObtenerPorIdsAsync(IEnumerable<int> ids)
+        => await _context.Productos
+            .Where(p => ids.Contains(p.IdProducto) && !p.Eliminado)
+            .ToListAsync();
+
     public async Task<Producto> AgregarAsync(Producto producto)
     {
         _context.Productos.Add(producto);

@@ -19,11 +19,13 @@ builder.Services.AddDbContext<TiendaDbContext>(options =>
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IMovimientoRepository, MovimientoRepository>();
+builder.Services.AddScoped<IPedidoRepository, PedidoRepository>();
 
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IProductoService, ProductoService>();
 builder.Services.AddScoped<IMovimientoService, MovimientoService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
+builder.Services.AddScoped<IPedidoService, PedidoService>();
 
 builder.Services.AddCors(options =>
 {
