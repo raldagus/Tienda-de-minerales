@@ -92,7 +92,7 @@ public class ProductoRepository : IProductoRepository
         });
 
         producto.Eliminado = true;
-        producto.FechaEliminado = DateTime.Now;
+        producto.FechaEliminado = DateTime.UtcNow;
         await _context.SaveChangesAsync();
         return true;
     }

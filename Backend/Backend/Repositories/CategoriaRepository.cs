@@ -44,7 +44,7 @@ public class CategoriaRepository : ICategoriaRepository
         if (categoria is null) return false;
 
         categoria.Eliminado = true;
-        categoria.FechaEliminado = DateTime.Now;
+        categoria.FechaEliminado = DateTime.UtcNow;
         await _context.SaveChangesAsync();
         return true;
     }
