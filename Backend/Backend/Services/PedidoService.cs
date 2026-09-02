@@ -25,6 +25,10 @@ public class PedidoService : IPedidoService
         var productos = (await _productoRepo.ObtenerPorIdsAsync(idsProductos))
             .ToDictionary(p => p.IdProducto);
 
+        var cantidadPorProducto = dto.Items
+            .GroupBy(i => i.ProductoId)
+            .ToDictionary(g => g.Key, g => g.Sum(i => i.Cantidad));
+
         var items = new List<PedidoItem>();
         foreach (var itemDto in dto.Items)
         {
@@ -34,7 +38,7 @@ public class PedidoService : IPedidoService
             if (itemDto.Cantidad < 1)
                 throw new ArgumentException($"La cantidad para \"{producto.Nombre}\" debe ser al menos 1.");
 
-            if (itemDto.Cantidad > producto.Stock)
+            if (cantidadPorProducto[itemDto.ProductoId] > producto.Stock)
                 throw new ArgumentException($"No hay stock suficiente de \"{producto.Nombre}\".");
 
             items.Add(new PedidoItem
