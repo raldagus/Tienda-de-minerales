@@ -16,5 +16,15 @@ public class ProductoConfiguration : IEntityTypeConfiguration<Producto>
         builder.HasOne(p => p.Categoria)
             .WithMany(c => c.Productos)
             .HasForeignKey(p => p.IdCategoria);
+
+        builder.Property<uint>("xmin")
+            .HasColumnType("xid")
+            .ValueGeneratedOnAddOrUpdate()
+            .IsConcurrencyToken();
+        builder.ToTable(t =>
+        {
+            t.HasCheckConstraint("CK_Producto_StockReservado_NoNegativo", "\"StockReservado\" >= 0");
+            t.HasCheckConstraint("CK_Producto_StockReservado_Max", "\"StockReservado\" <= \"Stock\"");
+        });
     }
 }

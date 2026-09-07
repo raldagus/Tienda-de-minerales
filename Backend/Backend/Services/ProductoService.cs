@@ -43,7 +43,7 @@ public class ProductoService : IProductoService
             Codigo = dto.Codigo,
             PrecioUnitario = dto.PrecioUnitario,
             Stock = dto.Stock,
-            CalibreMn = dto.CalibreMn
+            CalibreMm = dto.CalibreMm
         };
 
         var resultado = await _repo.AgregarAsync(producto);
@@ -65,7 +65,7 @@ public class ProductoService : IProductoService
         producto.PrecioUnitario = dto.PrecioUnitario;
         producto.IdCategoria = dto.IdCategoria;
         producto.Stock = dto.Stock;
-        producto.CalibreMn = dto.CalibreMn;
+        producto.CalibreMm = dto.CalibreMm;
 
         var resultado = await _repo.ModificarAsync(producto);
         resultado.Categoria = categoria;
@@ -122,5 +122,5 @@ public class ProductoService : IProductoService
 
     private static ProductoResponseDto ToDto(Producto p) =>
         new(p.IdProducto, p.Nombre, p.Descripcion, p.Codigo,
-            p.PrecioUnitario, p.Stock, p.CalibreMn, p.IdCategoria, p.Categoria.Nombre, p.ImagenUrl);
+            p.PrecioUnitario, p.Stock, p.CalibreMm, p.IdCategoria, p.Categoria.Nombre, p.ImagenUrl);
 }

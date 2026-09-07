@@ -16,8 +16,11 @@ public class PedidoConfiguration : IEntityTypeConfiguration<Pedido>
         builder.Property(p => p.Total).HasColumnType("numeric(12,2)");
         builder.Property(p => p.Estado).HasConversion<string>().HasMaxLength(20);
         builder.Property(p => p.PreferenceId).HasMaxLength(100);
+        builder.Property(p => p.NumeroPedido).IsRequired().HasMaxLength(10);
+        builder.Property(p => p.Canal).IsRequired().HasMaxLength(20);
 
         builder.HasIndex(p => p.PreferenceId);
         builder.HasIndex(p => p.Estado);
+        builder.HasIndex(p => p.NumeroPedido).IsUnique();
     }
 }

@@ -5,7 +5,7 @@ export interface ProductoApi {
   codigo: string;
   precioUnitario: number;
   stock: number;
-  calibreMn: number | null;
+  calibreMm: number | null;
   idCategoria: number;
   nombreCategoria: string;
   imagenUrl: string;

@@ -9,7 +9,11 @@ public class Producto
     public string? Codigo { get; set; }
     public decimal PrecioUnitario { get; set; }
     public int Stock { get; set; } = 0;
-    public int? CalibreMn { get; set; }
+    public int StockReservado { get; set; } = 0;
+    public int? CalibreMm { get; set; }
+    public string? Variedad { get; set; }
+    public string? Tipo { get; set; }
+    public string? ColorTag { get; set; }
     public bool Eliminado { get; set; } = false;
     public DateTime? FechaEliminado { get; set; }
     public string? ImagenUrl { get; set; }

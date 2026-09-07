@@ -18,7 +18,7 @@ function normalizarTipo(nombreCategoria: string): Tipo | undefined  {
       idCategoria: dto.idCategoria,
       categoriaNombre: dto.nombreCategoria,
       tipo: normalizarTipo(dto.nombreCategoria),
-      calibreMm: dto.calibreMn ?? undefined,
+      calibreMm: dto.calibreMm ?? undefined,
       precioUnitario: dto.precioUnitario,
       stock: dto.stock,
       imagenUrl: dto.imagenUrl,

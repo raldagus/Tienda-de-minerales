@@ -7,7 +7,7 @@ public record ProductoResponseDto(
     string? Codigo,
     decimal PrecioUnitario,
     int Stock,
-    int? CalibreMn,
+    int? CalibreMm,
     int IdCategoria,
     string NombreCategoria,
     string? ImagenUrl
@@ -20,7 +20,7 @@ public record ProductoCrearDto(
     string? Codigo,
     decimal PrecioUnitario,
     int Stock,
-    int? CalibreMn
+    int? CalibreMm
 );
 
 public record ProductoEditarDto(
@@ -30,6 +30,6 @@ public record ProductoEditarDto(
     string? Codigo,
     decimal PrecioUnitario,
     int Stock,
-    int? CalibreMn
+    int? CalibreMm
 
 );
