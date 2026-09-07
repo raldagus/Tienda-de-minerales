@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TiendaApi.DTOs;
+using TiendaApi.Exceptions;
 using TiendaApi.Services.Interfaces;
 
 namespace TiendaApi.Controllers;
@@ -28,6 +29,10 @@ public class PedidosController : ControllerBase
         catch (ArgumentException ex)
         {
             return BadRequest(new { mensaje = ex.Message });
+        }
+        catch (MercadoPagoNoDisponibleException ex)
+        {
+            return StatusCode(StatusCodes.Status502BadGateway, new { mensaje = ex.Message });
         }
     }
 

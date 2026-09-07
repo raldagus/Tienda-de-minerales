@@ -18,3 +18,12 @@ La cadena de conexión a PostgreSQL (`ConnectionStrings:DefaultConnection`) no v
 cd Backend/Backend
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=127.0.0.1;Port=5432;Database=tienda_minera;Username=...;Password=..."
 ```
+
+El Access Token de Mercado Pago (`MercadoPago:AccessToken`) sigue el mismo patrón — es un secreto, no va en `appsettings`:
+
+```bash
+cd Backend/Backend
+dotnet user-secrets set "MercadoPago:AccessToken" "TEST-..."
+```
+
+`MercadoPago:NotificationUrl` y `MercadoPago:FrontendUrl` no son secretos, van en `appsettings.Development.json`.

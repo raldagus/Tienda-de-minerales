@@ -14,7 +14,8 @@ public record CrearPedidoDto(
 );
 
 public record PedidoCreadoDto(
-    int PedidoId
+    int PedidoId,
+    string InitPoint
 );
 
 public record PedidoItemResponseDto(

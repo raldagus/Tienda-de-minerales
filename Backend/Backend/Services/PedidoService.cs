@@ -9,11 +9,13 @@ public class PedidoService : IPedidoService
 {
     private readonly IPedidoRepository _repo;
     private readonly IProductoRepository _productoRepo;
+    private readonly IMercadoPagoService _mercadoPagoService;
 
-    public PedidoService(IPedidoRepository repo, IProductoRepository productoRepo)
+    public PedidoService(IPedidoRepository repo, IProductoRepository productoRepo, IMercadoPagoService mercadoPagoService)
     {
         _repo = repo;
         _productoRepo = productoRepo;
+        _mercadoPagoService = mercadoPagoService;
     }
 
     public async Task<PedidoCreadoDto> CrearAsync(CrearPedidoDto dto)
@@ -61,7 +63,11 @@ public class PedidoService : IPedidoService
         };
 
         var resultado = await _repo.AgregarAsync(pedido);
-        return new PedidoCreadoDto(resultado.Id);
+
+        var preferencia = await _mercadoPagoService.CrearPreferenciaAsync(resultado);
+        await _repo.ActualizarPreferenceIdAsync(resultado.Id, preferencia.PreferenceId);
+
+        return new PedidoCreadoDto(resultado.Id, preferencia.InitPoint);
     }
 
     public async Task<PedidoResponseDto?> ObtenerPorIdAsync(int id)

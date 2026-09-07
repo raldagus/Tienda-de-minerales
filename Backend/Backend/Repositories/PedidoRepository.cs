@@ -25,4 +25,13 @@ public class PedidoRepository : IPedidoRepository
         => await _context.Pedidos
             .Include(p => p.Items)
             .FirstOrDefaultAsync(p => p.Id == id);
+
+    public async Task ActualizarPreferenceIdAsync(int pedidoId, string preferenceId)
+    {
+        var pedido = await _context.Pedidos.FindAsync(pedidoId);
+        if (pedido is null) return;
+
+        pedido.PreferenceId = preferenceId;
+        await _context.SaveChangesAsync();
+    }
 }

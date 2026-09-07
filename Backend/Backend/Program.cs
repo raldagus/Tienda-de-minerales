@@ -1,3 +1,4 @@
+using MercadoPago.Config;
 using Microsoft.EntityFrameworkCore;
 using TiendaApi.Data;
 using TiendaApi.Repositories;
@@ -16,6 +17,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<TiendaDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+MercadoPagoConfig.AccessToken = builder.Configuration["MercadoPago:AccessToken"];
+
 builder.Services.AddScoped<ICategoriaRepository, CategoriaRepository>();
 builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 builder.Services.AddScoped<IMovimientoRepository, MovimientoRepository>();
@@ -26,6 +29,7 @@ builder.Services.AddScoped<IProductoService, ProductoService>();
 builder.Services.AddScoped<IMovimientoService, MovimientoService>();
 builder.Services.AddScoped<IImagenService, ImagenService>();
 builder.Services.AddScoped<IPedidoService, PedidoService>();
+builder.Services.AddScoped<IMercadoPagoService, MercadoPagoService>();
 
 builder.Services.AddCors(options =>
 {
