@@ -94,6 +94,88 @@ public class PedidoService : IPedidoService
         return pedido is null ? null : ToDto(pedido);
     }
 
+    public async Task<IEnumerable<PedidoResponseDto>> ListarAsync(EstadoPedido? estado)
+    {
+        var pedidos = await _repo.ListarAsync(estado);
+        return pedidos.Select(ToDto);
+    }
+
+    public async Task<PedidoResponseDto?> ConfirmarAsync(int id)
+    {
+        var pedido = await _repo.ObtenerPorIdAsync(id);
+        if (pedido is null) return null;
+
+        ValidarTransicion(pedido.Estado, EstadoPedido.Confirmado);
+
+        var productos = (await _productoRepo.ObtenerPorIdsAsync(pedido.Items.Select(i => i.ProductoId)))
+            .ToDictionary(p => p.IdProducto);
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        foreach (var item in pedido.Items)
+        {
+            if (!productos.TryGetValue(item.ProductoId, out var producto))
+                throw new InvalidOperationException($"El producto {item.ProductoId} ya no existe.");
+
+            producto.Stock -= item.Cantidad;
+            producto.StockReservado -= item.Cantidad;
+
+            _context.MovimientosStock.Add(new MovimientoStock
+            {
+                IdProducto = producto.IdProducto,
+                TipoMovimiento = "Salida",
+                Cantidad = item.Cantidad,
+                PrecioUnitario = item.PrecioUnitario,
+                Motivo = $"Pedido #{pedido.NumeroPedido}"
+            });
+        }
+
+        pedido.Estado = EstadoPedido.Confirmado;
+
+        await _context.SaveChangesAsync();
+        await transaction.CommitAsync();
+
+        return ToDto(pedido);
+    }
+
+    public async Task<PedidoResponseDto?> CancelarAsync(int id)
+    {
+        var pedido = await _repo.ObtenerPorIdAsync(id);
+        if (pedido is null) return null;
+
+        ValidarTransicion(pedido.Estado, EstadoPedido.Cancelado);
+
+        var productos = (await _productoRepo.ObtenerPorIdsAsync(pedido.Items.Select(i => i.ProductoId)))
+            .ToDictionary(p => p.IdProducto);
+
+        foreach (var item in pedido.Items)
+        {
+            if (!productos.TryGetValue(item.ProductoId, out var producto))
+                throw new InvalidOperationException($"El producto {item.ProductoId} ya no existe.");
+
+            producto.StockReservado -= item.Cantidad;
+        }
+
+        pedido.Estado = EstadoPedido.Cancelado;
+
+        await _context.SaveChangesAsync();
+
+        return ToDto(pedido);
+    }
+
+    private static void ValidarTransicion(EstadoPedido actual, EstadoPedido destino)
+    {
+        var esValida = actual switch
+        {
+            EstadoPedido.Pendiente => destino is EstadoPedido.Confirmado or EstadoPedido.Cancelado or EstadoPedido.Expirado,
+            EstadoPedido.Confirmado => destino is EstadoPedido.Enviado,
+            _ => false
+        };
+
+        if (!esValida)
+            throw new InvalidOperationException($"No se puede pasar de \"{actual}\" a \"{destino}\".");
+    }
+
     private static string GenerarNumeroPedido()
     {
         Span<char> buffer = stackalloc char[4];
@@ -111,6 +193,6 @@ public class PedidoService : IPedidoService
     }
 
     private static PedidoResponseDto ToDto(Pedido p) =>
-        new(p.Id, p.Estado.ToString(), p.Total,
+        new(p.Id, p.NumeroPedido, p.NombreComprador, p.Estado.ToString(), p.Total,
             p.Items.Select(i => new PedidoItemResponseDto(i.ProductoId, i.NombreProducto, i.Cantidad, i.PrecioUnitario)).ToList());
 }

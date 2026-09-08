@@ -26,6 +26,15 @@ public class PedidoRepository : IPedidoRepository
             .Include(p => p.Items)
             .FirstOrDefaultAsync(p => p.Id == id);
 
+    public async Task<List<Pedido>> ListarAsync(EstadoPedido? estado)
+    {
+        var query = _context.Pedidos.Include(p => p.Items).AsQueryable();
+        if (estado is not null)
+            query = query.Where(p => p.Estado == estado);
+
+        return await query.OrderByDescending(p => p.FechaExpiracion).ToListAsync();
+    }
+
     public async Task ActualizarPreferenceIdAsync(int pedidoId, string preferenceId)
     {
         var pedido = await _context.Pedidos.FindAsync(pedidoId);

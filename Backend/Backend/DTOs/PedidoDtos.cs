@@ -28,6 +28,8 @@ public record PedidoItemResponseDto(
 
 public record PedidoResponseDto(
     int Id,
+    string NumeroPedido,
+    string NombreComprador,
     string Estado,
     decimal Total,
     List<PedidoItemResponseDto> Items
