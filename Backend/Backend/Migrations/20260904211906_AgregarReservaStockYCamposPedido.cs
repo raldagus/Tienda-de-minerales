@@ -41,14 +41,6 @@ namespace Backend.Migrations
                 type: "text",
                 nullable: true);
 
-            migrationBuilder.AddColumn<uint>(
-                name: "xmin",
-                table: "Productos",
-                type: "xid",
-                rowVersion: true,
-                nullable: false,
-                defaultValue: 0u);
-
             migrationBuilder.AddColumn<string>(
                 name: "Canal",
                 table: "Pedidos",
@@ -118,10 +110,6 @@ namespace Backend.Migrations
 
             migrationBuilder.DropColumn(
                 name: "Variedad",
-                table: "Productos");
-
-            migrationBuilder.DropColumn(
-                name: "xmin",
                 table: "Productos");
 
             migrationBuilder.DropColumn(
