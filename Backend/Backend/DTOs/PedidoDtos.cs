@@ -15,7 +15,8 @@ public record CrearPedidoDto(
 
 public record PedidoCreadoDto(
     int PedidoId,
-    string InitPoint
+    string NumeroPedido,
+    string MensajeWhatsApp
 );
 
 public record PedidoItemResponseDto(
