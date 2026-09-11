@@ -31,6 +31,8 @@ builder.Services.AddScoped<IImagenService, ImagenService>();
 builder.Services.AddScoped<IPedidoService, PedidoService>();
 builder.Services.AddScoped<IMercadoPagoService, MercadoPagoService>();
 
+builder.Services.AddHostedService<ExpiracionPedidosBackgroundService>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AngularDev", policy =>

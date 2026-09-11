@@ -163,6 +163,37 @@ public class PedidoService : IPedidoService
         return ToDto(pedido);
     }
 
+    public async Task<int> ExpirarVencidosAsync()
+    {
+        var vencidos = await _repo.ListarPendientesVencidosAsync(DateTime.UtcNow);
+        if (vencidos.Count == 0) return 0;
+
+        var idsProductos = vencidos.SelectMany(p => p.Items.Select(i => i.ProductoId)).Distinct();
+        var productos = (await _productoRepo.ObtenerPorIdsAsync(idsProductos))
+            .ToDictionary(p => p.IdProducto);
+
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        foreach (var pedido in vencidos)
+        {
+            ValidarTransicion(pedido.Estado, EstadoPedido.Expirado);
+
+            foreach (var item in pedido.Items)
+            {
+                // Si el producto fue eliminado no podemos ajustar la reserva; el pedido igual se expira.
+                if (productos.TryGetValue(item.ProductoId, out var producto))
+                    producto.StockReservado -= item.Cantidad;
+            }
+
+            pedido.Estado = EstadoPedido.Expirado;
+        }
+
+        await _context.SaveChangesAsync();
+        await transaction.CommitAsync();
+
+        return vencidos.Count;
+    }
+
     private static void ValidarTransicion(EstadoPedido actual, EstadoPedido destino)
     {
         var esValida = actual switch
@@ -193,6 +224,6 @@ public class PedidoService : IPedidoService
     }
 
     private static PedidoResponseDto ToDto(Pedido p) =>
-        new(p.Id, p.NumeroPedido, p.NombreComprador, p.Estado.ToString(), p.Total,
+        new(p.Id, p.NumeroPedido, p.NombreComprador, p.Estado.ToString(), p.Total, p.FechaCreacion,
             p.Items.Select(i => new PedidoItemResponseDto(i.ProductoId, i.NombreProducto, i.Cantidad, i.PrecioUnitario)).ToList());
 }

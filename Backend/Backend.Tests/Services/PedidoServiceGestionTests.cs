@@ -131,17 +131,17 @@ public class PedidoServiceGestionTests
     }
 
     [Fact]
-    public async Task Listar_sin_filtro_devuelve_todos_ordenados_por_fecha_de_expiracion_descendente()
+    public async Task Listar_sin_filtro_devuelve_todos_ordenados_por_fecha_de_creacion_descendente()
     {
-        var ctx = CrearContexto(nameof(Listar_sin_filtro_devuelve_todos_ordenados_por_fecha_de_expiracion_descendente));
+        var ctx = CrearContexto(nameof(Listar_sin_filtro_devuelve_todos_ordenados_por_fecha_de_creacion_descendente));
         var categoria = new Categoria { Nombre = "Cuarzos" };
         var producto = new Producto { Nombre = "Cuarzo rosa", PrecioUnitario = 4500m, Stock = 10, Categoria = categoria };
         ctx.Categorias.Add(categoria);
         ctx.Productos.Add(producto);
         await ctx.SaveChangesAsync();
 
-        var masViejo = new Pedido { NombreComprador = "A", EmailComprador = "a@mail.com", NumeroPedido = "AAAA", FechaExpiracion = DateTime.UtcNow.AddHours(24), Estado = EstadoPedido.Pendiente };
-        var masNuevo = new Pedido { NombreComprador = "B", EmailComprador = "b@mail.com", NumeroPedido = "BBBB", FechaExpiracion = DateTime.UtcNow.AddHours(48), Estado = EstadoPedido.Confirmado };
+        var masViejo = new Pedido { NombreComprador = "A", EmailComprador = "a@mail.com", NumeroPedido = "AAAA", FechaCreacion = DateTime.UtcNow.AddHours(-2), FechaExpiracion = DateTime.UtcNow.AddHours(46), Estado = EstadoPedido.Pendiente };
+        var masNuevo = new Pedido { NombreComprador = "B", EmailComprador = "b@mail.com", NumeroPedido = "BBBB", FechaCreacion = DateTime.UtcNow, FechaExpiracion = DateTime.UtcNow.AddHours(24), Estado = EstadoPedido.Confirmado };
         ctx.Pedidos.AddRange(masViejo, masNuevo);
         await ctx.SaveChangesAsync();
 

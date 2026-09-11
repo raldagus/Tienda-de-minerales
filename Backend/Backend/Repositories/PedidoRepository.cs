@@ -32,8 +32,14 @@ public class PedidoRepository : IPedidoRepository
         if (estado is not null)
             query = query.Where(p => p.Estado == estado);
 
-        return await query.OrderByDescending(p => p.FechaExpiracion).ToListAsync();
+        return await query.OrderByDescending(p => p.FechaCreacion).ToListAsync();
     }
+
+    public async Task<List<Pedido>> ListarPendientesVencidosAsync(DateTime limite)
+        => await _context.Pedidos
+            .Include(p => p.Items)
+            .Where(p => p.Estado == EstadoPedido.Pendiente && p.FechaExpiracion < limite)
+            .ToListAsync();
 
     public async Task ActualizarPreferenceIdAsync(int pedidoId, string preferenceId)
     {

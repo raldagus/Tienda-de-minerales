@@ -56,5 +56,11 @@ public class TiendaDbContext : DbContext
             if (entry.State == EntityState.Added && entry.Entity.FechaMovimiento == default)
                 entry.Entity.FechaMovimiento = ahora;
         }
+
+        foreach (var entry in ChangeTracker.Entries<Pedido>())
+        {
+            if (entry.State == EntityState.Added && entry.Entity.FechaCreacion == default)
+                entry.Entity.FechaCreacion = ahora;
+        }
     }
 }

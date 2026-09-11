@@ -32,5 +32,6 @@ public record PedidoResponseDto(
     string NombreComprador,
     string Estado,
     decimal Total,
+    DateTime FechaCreacion,
     List<PedidoItemResponseDto> Items
 );

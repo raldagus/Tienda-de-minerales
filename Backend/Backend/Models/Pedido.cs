@@ -12,6 +12,7 @@ public class Pedido
     public string? PreferenceId { get; set; }
     public DateTime? PagadoEn { get; set; }
     public string NumeroPedido { get; set; } = string.Empty;  // corto, legible: "A7K3"
+    public DateTime FechaCreacion { get; set; } = DateTime.UtcNow;
     public DateTime FechaExpiracion { get; set; }
     public string Canal { get; set; } = "WhatsApp";           // preparado para MP futuro
 
