@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TiendaApi.DTOs;
 using TiendaApi.Models;
@@ -41,6 +42,7 @@ public class PedidosController : ControllerBase
     }
 
     /// <summary>Lista pedidos para el panel de administración, con filtro opcional por estado.</summary>
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PedidoResponseDto>>> Listar([FromQuery] EstadoPedido? estado = null)
     {
@@ -49,6 +51,7 @@ public class PedidosController : ControllerBase
     }
 
     /// <summary>Confirma un pedido pendiente: descuenta el stock físico y libera la reserva.</summary>
+    [Authorize]
     [HttpPost("{id:int}/confirmar")]
     public async Task<ActionResult<PedidoResponseDto>> Confirmar(int id)
     {
@@ -64,6 +67,7 @@ public class PedidosController : ControllerBase
     }
 
     /// <summary>Cancela un pedido pendiente y libera la reserva de stock.</summary>
+    [Authorize]
     [HttpPost("{id:int}/cancelar")]
     public async Task<ActionResult<PedidoResponseDto>> Cancelar(int id)
     {
