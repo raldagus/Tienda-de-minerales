@@ -50,13 +50,36 @@
       <span>${{ pedidoService.totalPedido() }}</span>
     </div>
 
-    <a
-      [href]="pedidoService.linkPedidoWhatsapp()"
-      target="_blank"
-      class="btn btn--primario btn--grande"
-    >
-      Confirmar pedido por mensaje
-    </a>
+    <form class="panel-pedido__datos" (ngSubmit)="confirmar()">
+      <label>
+        Nombre
+        <input type="text" name="nombre" autocomplete="name" [(ngModel)]="nombre" required />
+      </label>
+      <label>
+        Email
+        <input type="email" name="email" autocomplete="email" [(ngModel)]="email" required />
+      </label>
+      <label>
+        Teléfono (opcional)
+        <input type="tel" name="telefono" autocomplete="tel" [(ngModel)]="telefono" />
+      </label>
+      <label>
+        Dirección de envío (opcional)
+        <input type="text" name="direccion" autocomplete="street-address" [(ngModel)]="direccion" />
+      </label>
+
+      @if (pedidoService.errorEnvio(); as errorEnvio) {
+        <p class="panel-pedido__error">{{ errorEnvio }}</p>
+      }
+
+      <button
+        type="submit"
+        class="btn btn--primario btn--grande"
+        [disabled]="pedidoService.enviando()"
+      >
+        {{ pedidoService.enviando() ? 'Enviando...' : 'Confirmar pedido por WhatsApp' }}
+      </button>
+    </form>
     <p class="panel-pedido__nota">
       Te vamos a contactar para coordinar pago y envío. No se realiza cobro en la página.
     </p>

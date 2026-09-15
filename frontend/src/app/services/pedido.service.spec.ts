@@ -1,5 +1,10 @@
+import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { vi } from 'vitest';
 import { PedidoService } from './pedido.service';
 import { Producto } from '../models/producto.model';
+import { environment } from '../../environments/environment';
 
 function crearProducto(overrides: Partial<Producto> = {}): Producto {
   return {
@@ -18,9 +23,18 @@ function crearProducto(overrides: Partial<Producto> = {}): Producto {
 
 describe('PedidoService', () => {
   let servicio: PedidoService;
+  let httpMock: HttpTestingController;
 
   beforeEach(() => {
-    servicio = new PedidoService();
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()],
+    });
+    servicio = TestBed.inject(PedidoService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
   });
 
   it('agrega un producto nuevo al carrito', () => {
@@ -82,5 +96,73 @@ describe('PedidoService', () => {
     servicio.agregarAlPedido(producto, 2);
 
     expect(servicio.alcanzoStockMaximo(producto)).toBe(true);
+  });
+
+  describe('confirmarPedido', () => {
+    it('llama a POST /api/pedidos y no abre whatsapp hasta que responde', () => {
+      const producto = crearProducto({ disponible: 5 });
+      servicio.agregarAlPedido(producto, 2);
+      const openSpy = vi.spyOn(window, 'open').mockReturnValue(null);
+
+      servicio.confirmarPedido({ nombre: 'Juan Pérez', email: 'juan@mail.com' });
+
+      const peticion = httpMock.expectOne(`${environment.apiUrl}/api/pedidos`);
+      expect(peticion.request.method).toBe('POST');
+      expect(peticion.request.body).toEqual({
+        nombre: 'Juan Pérez',
+        email: 'juan@mail.com',
+        telefono: null,
+        direccion: null,
+        items: [{ productoId: producto.id, cantidad: 2 }],
+      });
+      expect(openSpy).not.toHaveBeenCalled();
+      expect(servicio.enviando()).toBe(true);
+
+      openSpy.mockRestore();
+    });
+
+    it('abre whatsapp con el mensaje del backend solo despues de un POST exitoso, y vacia el carrito', () => {
+      const producto = crearProducto({ disponible: 5 });
+      servicio.agregarAlPedido(producto, 2);
+      const openSpy = vi.spyOn(window, 'open').mockReturnValue(null);
+
+      servicio.confirmarPedido({ nombre: 'Juan Pérez', email: 'juan@mail.com' });
+      const peticion = httpMock.expectOne(`${environment.apiUrl}/api/pedidos`);
+      peticion.flush({ pedidoId: 1, numeroPedido: 'A7K3', mensajeWhatsApp: 'Pedido #A7K3' });
+
+      expect(openSpy).toHaveBeenCalledTimes(1);
+      expect(openSpy.mock.calls[0][0]).toContain('https://wa.me/5493834778412?text=');
+      expect(openSpy.mock.calls[0][0]).toContain(encodeURIComponent('Pedido #A7K3'));
+      expect(servicio.enviando()).toBe(false);
+      expect(servicio.pedido()).toEqual([]);
+
+      openSpy.mockRestore();
+    });
+
+    it('si el POST falla, no abre whatsapp, no vacia el carrito y expone el error del backend', () => {
+      const producto = crearProducto({ disponible: 5 });
+      servicio.agregarAlPedido(producto, 1);
+      const openSpy = vi.spyOn(window, 'open').mockReturnValue(null);
+
+      servicio.confirmarPedido({ nombre: 'Juan Pérez', email: 'juan@mail.com' });
+      const peticion = httpMock.expectOne(`${environment.apiUrl}/api/pedidos`);
+      peticion.flush(
+        { mensaje: 'No hay stock suficiente de "Cuarzo rosa".' },
+        { status: 400, statusText: 'Bad Request' }
+      );
+
+      expect(openSpy).not.toHaveBeenCalled();
+      expect(servicio.enviando()).toBe(false);
+      expect(servicio.pedido().length).toBe(1);
+      expect(servicio.errorEnvio()).toBe('No hay stock suficiente de "Cuarzo rosa".');
+
+      openSpy.mockRestore();
+    });
+
+    it('no envia nada si el carrito esta vacio', () => {
+      servicio.confirmarPedido({ nombre: 'Juan Pérez', email: 'juan@mail.com' });
+
+      httpMock.expectNone(`${environment.apiUrl}/api/pedidos`);
+    });
   });
 });

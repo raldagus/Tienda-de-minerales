@@ -116,6 +116,42 @@
   border-bottom: 1px solid var(--piedra-borde);
 }
 
+.panel-pedido__datos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--ceniza);
+  }
+
+  input {
+    font-family: var(--fuente-cuerpo);
+    font-size: 0.95rem;
+    color: var(--cuarzo);
+    background: var(--onix);
+    border: 1px solid var(--piedra-borde);
+    border-radius: var(--radio-boton);
+    padding: 0.65rem 0.85rem;
+
+    &:focus-visible {
+      outline: 2px solid var(--cuarzo);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.panel-pedido__error {
+  color: var(--agata);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
 .panel-pedido__nota {
   color: var(--ceniza);
   font-size: 0.8rem;

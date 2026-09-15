@@ -1,15 +1,28 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Producto, ItemPedido } from '../models/producto.model';
+import { DatosComprador } from '../models/pedido.model';
+import { CrearPedidoApiDto, PedidoCreadoApiDto } from '../models/pedidoApi';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class PedidoService {
   private readonly numeroWhatsapp = '5493834778412';
+
+  private http = inject(HttpClient);
+  private readonly baseUrl = environment.apiUrl;
 
   pedido = signal<ItemPedido[]>([]);
   estaAbierto = signal(false);
 
   private _error = signal<string | null>(null);
   readonly error = this._error.asReadonly();
+
+  private _enviando = signal(false);
+  readonly enviando = this._enviando.asReadonly();
+
+  private _errorEnvio = signal<string | null>(null);
+  readonly errorEnvio = this._errorEnvio.asReadonly();
 
   totalPedido = computed(() =>
     this.pedido().reduce((acc, item) => acc + item.producto.precioUnitario * item.cantidad, 0)
@@ -75,13 +88,40 @@ export class PedidoService {
     this.estaAbierto.set(!this.estaAbierto());
   }
 
-  linkPedidoWhatsapp(): string {
-    const lineas = this.pedido().map((i) => {
-      const calibre = i.producto.calibreMm ? ` (${i.producto.calibreMm}mm)` : '';
-      return `• ${i.cantidad}x ${i.producto.nombre}${calibre} - $${i.producto.precioUnitario * i.cantidad}`;
-    });
-    const mensaje = `Hola! Quiero confirmar este pedido:\n\n${lineas.join('\n')}\n\nTotal: $${this.totalPedido()}`;
+  /**
+   * Orden crítico: primero POST /api/pedidos, y solo si responde OK se abre
+   * WhatsApp con el mensaje que arma el backend. Si el POST falla (sin stock,
+   * error de red, etc.) no se abre WhatsApp y el carrito no se vacía: el
+   * motivo queda en `errorEnvio`, un estado normal de la UI, no una excepción.
+   */
+  confirmarPedido(datos: DatosComprador): void {
+    if (this.pedido().length === 0) return;
 
-    return `https://wa.me/${this.numeroWhatsapp}?text=${encodeURIComponent(mensaje)}`;
+    this._enviando.set(true);
+    this._errorEnvio.set(null);
+
+    const body: CrearPedidoApiDto = {
+      nombre: datos.nombre,
+      email: datos.email,
+      telefono: datos.telefono || null,
+      direccion: datos.direccion || null,
+      items: this.pedido().map((i) => ({ productoId: i.producto.id, cantidad: i.cantidad })),
+    };
+
+    this.http.post<PedidoCreadoApiDto>(`${this.baseUrl}/api/pedidos`, body).subscribe({
+      next: (resultado) => {
+        this._enviando.set(false);
+        this.pedido.set([]);
+        this.abrirWhatsapp(resultado.mensajeWhatsApp);
+      },
+      error: (err) => {
+        this._enviando.set(false);
+        this._errorEnvio.set(err?.error?.mensaje ?? 'No pudimos registrar el pedido. Intentá de nuevo.');
+      },
+    });
+  }
+
+  private abrirWhatsapp(mensaje: string): void {
+    window.open(`https://wa.me/${this.numeroWhatsapp}?text=${encodeURIComponent(mensaje)}`, '_blank');
   }
 }
