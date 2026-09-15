@@ -5,6 +5,7 @@ export interface ProductoApi {
   codigo: string;
   precioUnitario: number;
   stock: number;
+  disponible: number;
   calibreMm: number | null;
   idCategoria: number;
   nombreCategoria: string;

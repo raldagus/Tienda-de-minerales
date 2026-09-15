@@ -8,6 +8,9 @@ export class PedidoService {
   pedido = signal<ItemPedido[]>([]);
   estaAbierto = signal(false);
 
+  private _error = signal<string | null>(null);
+  readonly error = this._error.asReadonly();
+
   totalPedido = computed(() =>
     this.pedido().reduce((acc, item) => acc + item.producto.precioUnitario * item.cantidad, 0)
   );
@@ -16,13 +19,23 @@ export class PedidoService {
     this.pedido().reduce((acc, item) => acc + item.cantidad, 0)
   );
 
-  agregarAlPedido(producto: Producto, cantidad: number = 1): void {
+  /**
+   * Agrega el producto al carrito, recortando la cantidad al disponible
+   * (Stock - StockReservado que calcula la API), no al stock físico.
+   * Sin disponible, no hay excepción: devuelve false y deja el motivo en `error`.
+   */
+  agregarAlPedido(producto: Producto, cantidad: number = 1): boolean {
     const actual = this.pedido();
     const existente = actual.find((i) => i.producto.id === producto.id);
     const cantidadActual = existente?.cantidad ?? 0;
-    const cantidadAAgregar = Math.min(cantidad, producto.stock - cantidadActual);
+    const disponibleRestante = producto.disponible - cantidadActual;
 
-    if (cantidadAAgregar <= 0) return;
+    if (disponibleRestante <= 0) {
+      this._error.set(`No queda stock disponible de "${producto.nombre}".`);
+      return false;
+    }
+
+    const cantidadAAgregar = Math.min(cantidad, disponibleRestante);
 
     if (existente) {
       this.pedido.set(
@@ -33,6 +46,9 @@ export class PedidoService {
     } else {
       this.pedido.set([...actual, { producto, cantidad: cantidadAAgregar }]);
     }
+
+    this._error.set(null);
+    return true;
   }
 
   quitarDelPedido(productoId: number): void {
@@ -44,7 +60,7 @@ export class PedidoService {
   }
 
   alcanzoStockMaximo(producto: Producto): boolean {
-    return this.cantidadEnPedido(producto.id) >= producto.stock;
+    return this.cantidadEnPedido(producto.id) >= producto.disponible;
   }
 
   abrirPanel(): void {

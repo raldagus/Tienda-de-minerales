@@ -7,6 +7,7 @@ export interface Producto {
   descripcion: string;
   precioUnitario: number;
   stock: number;
+  disponible: number;
   calibreMm?: number;
   idCategoria: number;
   categoriaNombre: string;

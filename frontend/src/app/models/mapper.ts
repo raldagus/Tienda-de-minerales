@@ -21,6 +21,7 @@ function normalizarTipo(nombreCategoria: string): Tipo | undefined  {
       calibreMm: dto.calibreMm ?? undefined,
       precioUnitario: dto.precioUnitario,
       stock: dto.stock,
+      disponible: dto.disponible,
       imagenUrl: dto.imagenUrl,
     };
   }
