@@ -123,6 +123,50 @@ public class PedidoServiceCrearAsyncTests
     }
 
     [Fact]
+    public async Task Congela_el_calibre_del_producto_en_el_item_del_pedido()
+    {
+        var ctx = CrearContexto(nameof(Congela_el_calibre_del_producto_en_el_item_del_pedido));
+        var categoria = new Categoria { Nombre = "Cuarzos" };
+        var cuarzoCalibrado = new Producto { Nombre = "Cuarzo rosa", PrecioUnitario = 4500m, Stock = 10, CalibreMm = 20, Categoria = categoria };
+        ctx.Categorias.Add(categoria);
+        ctx.Productos.Add(cuarzoCalibrado);
+        await ctx.SaveChangesAsync();
+
+        var servicio = new PedidoService(new PedidoRepository(ctx), new ProductoRepository(ctx), ctx);
+        var dto = new CrearPedidoDto("Juan Pérez", "juan@mail.com", null, null, new List<CrearPedidoItemDto>
+        {
+            new(cuarzoCalibrado.IdProducto, 1)
+        });
+
+        var resultado = await servicio.CrearAsync(dto);
+
+        var pedido = await ctx.Pedidos.Include(p => p.Items).SingleAsync(p => p.Id == resultado.PedidoId);
+        var item = Assert.Single(pedido.Items);
+        Assert.Equal(20, item.CalibreMm);
+    }
+
+    [Fact]
+    public async Task El_mensaje_de_whatsapp_incluye_el_calibre_cuando_el_producto_lo_tiene()
+    {
+        var ctx = CrearContexto(nameof(El_mensaje_de_whatsapp_incluye_el_calibre_cuando_el_producto_lo_tiene));
+        var categoria = new Categoria { Nombre = "Cuarzos" };
+        var cuarzoCalibrado = new Producto { Nombre = "Cuarzo rosa", PrecioUnitario = 4500m, Stock = 10, CalibreMm = 20, Categoria = categoria };
+        ctx.Categorias.Add(categoria);
+        ctx.Productos.Add(cuarzoCalibrado);
+        await ctx.SaveChangesAsync();
+
+        var servicio = new PedidoService(new PedidoRepository(ctx), new ProductoRepository(ctx), ctx);
+        var dto = new CrearPedidoDto("Juan Pérez", "juan@mail.com", null, null, new List<CrearPedidoItemDto>
+        {
+            new(cuarzoCalibrado.IdProducto, 1)
+        });
+
+        var resultado = await servicio.CrearAsync(dto);
+
+        Assert.Contains("- Cuarzo rosa 20mm x1 — $4.500", resultado.MensajeWhatsApp);
+    }
+
+    [Fact]
     public async Task Traduce_conflicto_de_concurrencia_en_un_mensaje_claro()
     {
         var ctx = CrearContexto(nameof(Traduce_conflicto_de_concurrencia_en_un_mensaje_claro));

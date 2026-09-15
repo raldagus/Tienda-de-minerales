@@ -8,6 +8,7 @@ public class PedidoItem
     public int Cantidad { get; set; }
     public decimal PrecioUnitario { get; set; }
     public string NombreProducto { get; set; } = string.Empty;
+    public int? CalibreMm { get; set; }
 
     // Navegación
     public Pedido Pedido { get; set; } = null!;

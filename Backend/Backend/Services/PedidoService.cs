@@ -58,7 +58,8 @@ public class PedidoService : IPedidoService
                 ProductoId = producto.IdProducto,
                 Cantidad = itemDto.Cantidad,
                 PrecioUnitario = producto.PrecioUnitario,
-                NombreProducto = producto.Nombre
+                NombreProducto = producto.Nombre,
+                CalibreMm = producto.CalibreMm
             });
         }
 
@@ -218,7 +219,10 @@ public class PedidoService : IPedidoService
     private static string ConstruirMensajeWhatsApp(Pedido pedido)
     {
         var lineasItems = string.Join("\n", pedido.Items.Select(i =>
-            $"- {i.NombreProducto} x{i.Cantidad} — ${(i.Cantidad * i.PrecioUnitario).ToString("N0", CulturaMonto)}"));
+        {
+            var calibre = i.CalibreMm.HasValue ? $" {i.CalibreMm}mm" : "";
+            return $"- {i.NombreProducto}{calibre} x{i.Cantidad} — ${(i.Cantidad * i.PrecioUnitario).ToString("N0", CulturaMonto)}";
+        }));
 
         return $"Pedido #{pedido.NumeroPedido}\n\n{lineasItems}\n\nTotal: ${pedido.Total.ToString("N0", CulturaMonto)}\n\nNombre: {pedido.NombreComprador}";
     }
