@@ -122,5 +122,6 @@ public class ProductoService : IProductoService
 
     private static ProductoResponseDto ToDto(Producto p) =>
         new(p.IdProducto, p.Nombre, p.Descripcion, p.Codigo,
-            p.PrecioUnitario, p.Stock, p.CalibreMm, p.IdCategoria, p.Categoria.Nombre, p.ImagenUrl);
+            p.PrecioUnitario, p.Stock, Math.Max(0, p.Stock - p.StockReservado),
+            p.CalibreMm, p.IdCategoria, p.Categoria.Nombre, p.ImagenUrl);
 }

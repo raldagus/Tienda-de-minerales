@@ -7,6 +7,7 @@ public record ProductoResponseDto(
     string? Codigo,
     decimal PrecioUnitario,
     int Stock,
+    int Disponible,
     int? CalibreMm,
     int IdCategoria,
     string NombreCategoria,
