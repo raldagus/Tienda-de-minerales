@@ -1,0 +1,38 @@
+.admin-pedidos {
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.admin-pedidos__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+
+  h1 {
+    font-family: var(--fuente-display);
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin: 0;
+  }
+}
+
+.admin-pedidos__salir {
+  background: none;
+  border: 1px solid var(--piedra-borde);
+  color: var(--ceniza);
+  border-radius: var(--radio-boton);
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.85rem;
+
+  &:hover {
+    color: var(--cuarzo);
+    border-color: var(--cuarzo);
+  }
+}
+
+.admin-pedidos__placeholder {
+  color: var(--ceniza);
+}
