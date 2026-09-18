@@ -59,6 +59,29 @@ describe('PedidoAdminService', () => {
     peticion.flush([]);
   });
 
+  it('confirmar hace POST /api/pedidos/{id}/confirmar y devuelve el pedido actualizado', () => {
+    let resultado: PedidoAdmin | undefined;
+
+    servicio.confirmar(7).subscribe((p) => (resultado = p));
+
+    const peticion = httpMock.expectOne(`${environment.apiUrl}/api/pedidos/7/confirmar`);
+    expect(peticion.request.method).toBe('POST');
+    peticion.flush({ ...respuesta[1], id: 7, estado: 'Confirmado' });
+    expect(resultado?.estado).toBe('Confirmado');
+    expect(resultado?.fechaCreacion).toBeInstanceOf(Date);
+  });
+
+  it('cancelar hace POST /api/pedidos/{id}/cancelar y devuelve el pedido actualizado', () => {
+    let resultado: PedidoAdmin | undefined;
+
+    servicio.cancelar(7).subscribe((p) => (resultado = p));
+
+    const peticion = httpMock.expectOne(`${environment.apiUrl}/api/pedidos/7/cancelar`);
+    expect(peticion.request.method).toBe('POST');
+    peticion.flush({ ...respuesta[0], id: 7, estado: 'Cancelado' });
+    expect(resultado?.estado).toBe('Cancelado');
+  });
+
   it('mapea la fecha a Date y conserva el orden que devuelve el backend (fecha descendente)', () => {
     let resultado: PedidoAdmin[] = [];
 

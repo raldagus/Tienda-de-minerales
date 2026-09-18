@@ -141,6 +141,54 @@
   gap: 0.2rem;
 }
 
+.admin-pedidos__acciones {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-pedidos__confirmar,
+.admin-pedidos__cancelar {
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radio-boton);
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+
+  &:focus-visible {
+    outline: 2px solid var(--cuarzo);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.admin-pedidos__confirmar {
+  background: var(--malaquita);
+  color: var(--onix);
+
+  &:hover:not(:disabled) {
+    background: var(--malaquita-hover);
+  }
+}
+
+.admin-pedidos__cancelar {
+  background: none;
+  color: var(--agata);
+  border-color: var(--agata);
+
+  &:hover:not(:disabled) {
+    color: var(--agata-hover);
+    border-color: var(--agata-hover);
+  }
+}
+
 .admin-pedidos__estado-badge {
   display: inline-block;
   padding: 0.2rem 0.7rem;

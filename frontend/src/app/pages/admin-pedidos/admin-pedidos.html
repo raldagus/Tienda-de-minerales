@@ -23,6 +23,10 @@
     <p class="admin-pedidos__error" role="alert">{{ mensajeError }}</p>
   }
 
+  @if (errorAccion(); as mensajeAccion) {
+    <p class="admin-pedidos__error" role="alert">{{ mensajeAccion }}</p>
+  }
+
   @if (cargando() && pedidos().length === 0) {
     <p class="admin-pedidos__estado">Cargando pedidos...</p>
   } @else if (!error() && pedidos().length === 0) {
@@ -38,6 +42,7 @@
             <th>Detalle</th>
             <th>Total</th>
             <th>Estado</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -58,6 +63,28 @@
                 <span class="admin-pedidos__estado-badge admin-pedidos__estado-badge--{{ pedido.estado.toLowerCase() }}">
                   {{ pedido.estado }}
                 </span>
+              </td>
+              <td>
+                @if (pedido.estado === 'Pendiente') {
+                  <div class="admin-pedidos__acciones">
+                    <button
+                      type="button"
+                      class="admin-pedidos__confirmar"
+                      [disabled]="estaEnCurso(pedido)"
+                      (click)="confirmar(pedido)"
+                    >
+                      Confirmar
+                    </button>
+                    <button
+                      type="button"
+                      class="admin-pedidos__cancelar"
+                      [disabled]="estaEnCurso(pedido)"
+                      (click)="cancelar(pedido)"
+                    >
+                      Cancelar
+                    </button>
+                  </div>
+                }
               </td>
             </tr>
           }

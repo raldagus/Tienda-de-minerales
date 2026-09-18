@@ -18,6 +18,18 @@ export class PedidoAdminService {
       .get<PedidoResponseApiDto[]>(`${this.baseUrl}/api/pedidos`, { params })
       .pipe(map((pedidos) => pedidos.map(mapearPedido)));
   }
+
+  confirmar(id: number): Observable<PedidoAdmin> {
+    return this.http
+      .post<PedidoResponseApiDto>(`${this.baseUrl}/api/pedidos/${id}/confirmar`, {})
+      .pipe(map(mapearPedido));
+  }
+
+  cancelar(id: number): Observable<PedidoAdmin> {
+    return this.http
+      .post<PedidoResponseApiDto>(`${this.baseUrl}/api/pedidos/${id}/cancelar`, {})
+      .pipe(map(mapearPedido));
+  }
 }
 
 function mapearPedido(dto: PedidoResponseApiDto): PedidoAdmin {

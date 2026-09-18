@@ -99,6 +99,105 @@ describe('AdminPedidos', () => {
     expect(fixture.componentInstance.error()).toBeTruthy();
   });
 
+  describe('acciones', () => {
+    function botones(fixture: ReturnType<typeof crear>, clase: string): HTMLButtonElement[] {
+      return Array.from(fixture.nativeElement.querySelectorAll(`.${clase}`));
+    }
+
+    function crearConLista(pedidos: unknown[]) {
+      const fixture = crear();
+      httpMock.expectOne((r) => r.url === url).flush(pedidos);
+      fixture.detectChanges();
+      return fixture;
+    }
+
+    it('muestra confirmar y cancelar solo en los pedidos pendientes', () => {
+      const fixture = crearConLista([
+        pedidoApi,
+        { ...pedidoApi, id: 2, numeroPedido: 'BBBB', estado: 'Confirmado' },
+      ]);
+
+      expect(botones(fixture, 'admin-pedidos__confirmar').length).toBe(1);
+      expect(botones(fixture, 'admin-pedidos__cancelar').length).toBe(1);
+    });
+
+    it('confirmar deshabilita ambos botones mientras el request esta en vuelo y despues refresca el listado', () => {
+      const fixture = crearConLista([pedidoApi]);
+
+      botones(fixture, 'admin-pedidos__confirmar')[0].click();
+      fixture.detectChanges();
+
+      expect(botones(fixture, 'admin-pedidos__confirmar')[0].disabled).toBe(true);
+      expect(botones(fixture, 'admin-pedidos__cancelar')[0].disabled).toBe(true);
+
+      httpMock.expectOne(`${url}/1/confirmar`).flush({ ...pedidoApi, estado: 'Confirmado' });
+      httpMock.expectOne((r) => r.url === url).flush([{ ...pedidoApi, estado: 'Confirmado' }]);
+      fixture.detectChanges();
+
+      expect(botones(fixture, 'admin-pedidos__confirmar').length).toBe(0);
+      expect(fixture.componentInstance.errorAccion()).toBeNull();
+    });
+
+    it('cancelar hace POST a cancelar y refresca el listado', () => {
+      const fixture = crearConLista([pedidoApi]);
+
+      botones(fixture, 'admin-pedidos__cancelar')[0].click();
+      httpMock.expectOne(`${url}/1/cancelar`).flush({ ...pedidoApi, estado: 'Cancelado' });
+
+      httpMock.expectOne((r) => r.url === url).flush([]);
+    });
+
+    it('ante un 409 muestra el mensaje del backend tal cual y refresca el listado', () => {
+      const fixture = crearConLista([pedidoApi]);
+      const mensaje = 'No se puede pasar de "Expirado" a "Confirmado".';
+
+      botones(fixture, 'admin-pedidos__confirmar')[0].click();
+      httpMock.expectOne(`${url}/1/confirmar`).flush({ mensaje }, { status: 409, statusText: 'Conflict' });
+      httpMock.expectOne((r) => r.url === url).flush([{ ...pedidoApi, estado: 'Expirado' }]);
+      fixture.detectChanges();
+
+      expect(fixture.componentInstance.errorAccion()).toBe(mensaje);
+      expect(fixture.nativeElement.querySelector('[role="alert"]').textContent).toContain(mensaje);
+      expect(fixture.componentInstance.pedidos()[0].estado).toBe('Expirado');
+      expect(botones(fixture, 'admin-pedidos__confirmar').length).toBe(0);
+    });
+
+    it('ante otro error muestra un mensaje generico, rehabilita los botones y no refresca', () => {
+      const fixture = crearConLista([pedidoApi]);
+
+      botones(fixture, 'admin-pedidos__confirmar')[0].click();
+      httpMock.expectOne(`${url}/1/confirmar`).flush({}, { status: 500, statusText: 'Server Error' });
+      fixture.detectChanges();
+
+      expect(fixture.componentInstance.errorAccion()).toBeTruthy();
+      expect(botones(fixture, 'admin-pedidos__confirmar')[0].disabled).toBe(false);
+    });
+
+    it('ante un 401 en una accion cierra la sesion y redirige al login', () => {
+      const logout = vi.spyOn(TestBed.inject(AuthService), 'logout');
+      const navegar = vi.spyOn(TestBed.inject(Router), 'navigateByUrl').mockResolvedValue(true);
+      const fixture = crearConLista([pedidoApi]);
+
+      botones(fixture, 'admin-pedidos__cancelar')[0].click();
+      httpMock.expectOne(`${url}/1/cancelar`).flush({}, { status: 401, statusText: 'Unauthorized' });
+
+      expect(logout).toHaveBeenCalled();
+      expect(navegar).toHaveBeenCalledWith('/admin/login');
+    });
+
+    it('limpia el error de la accion anterior al iniciar una nueva', () => {
+      const fixture = crearConLista([pedidoApi]);
+      botones(fixture, 'admin-pedidos__confirmar')[0].click();
+      httpMock.expectOne(`${url}/1/confirmar`).flush({}, { status: 500, statusText: 'Server Error' });
+      fixture.detectChanges();
+
+      botones(fixture, 'admin-pedidos__cancelar')[0].click();
+
+      expect(fixture.componentInstance.errorAccion()).toBeNull();
+      httpMock.expectOne(`${url}/1/cancelar`);
+    });
+  });
+
   it('ante un 401 cierra la sesion y redirige al login', () => {
     const authService = TestBed.inject(AuthService);
     const logout = vi.spyOn(authService, 'logout');
