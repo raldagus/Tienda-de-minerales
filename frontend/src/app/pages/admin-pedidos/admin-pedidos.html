@@ -4,5 +4,65 @@
     <button type="button" class="admin-pedidos__salir" (click)="cerrarSesion()">Cerrar sesión</button>
   </header>
 
-  <p class="admin-pedidos__placeholder">El listado de pedidos se arma en el próximo commit.</p>
+  <div class="admin-pedidos__barra">
+    <label>
+      Estado
+      <select [value]="filtro()" (change)="cambiarFiltro($any($event.target).value)">
+        <option value="">Todos</option>
+        @for (estado of estados; track estado) {
+          <option [value]="estado">{{ estado }}</option>
+        }
+      </select>
+    </label>
+    <button type="button" class="admin-pedidos__recargar" (click)="cargar()" [disabled]="cargando()">
+      Actualizar
+    </button>
+  </div>
+
+  @if (error(); as mensajeError) {
+    <p class="admin-pedidos__error" role="alert">{{ mensajeError }}</p>
+  }
+
+  @if (cargando() && pedidos().length === 0) {
+    <p class="admin-pedidos__estado">Cargando pedidos...</p>
+  } @else if (!error() && pedidos().length === 0) {
+    <p class="admin-pedidos__estado">No hay pedidos{{ filtro() ? ' en estado ' + filtro() : '' }}.</p>
+  } @else if (pedidos().length > 0) {
+    <div class="admin-pedidos__tabla-wrap" [class.admin-pedidos__tabla-wrap--cargando]="cargando()">
+      <table class="admin-pedidos__tabla">
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Fecha</th>
+            <th>Comprador</th>
+            <th>Detalle</th>
+            <th>Total</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (pedido of pedidos(); track pedido.id) {
+            <tr>
+              <td class="admin-pedidos__numero">#{{ pedido.numeroPedido }}</td>
+              <td>{{ formatoFecha(pedido.fechaCreacion) }}</td>
+              <td>{{ pedido.nombreComprador }}</td>
+              <td>
+                <ul class="admin-pedidos__items">
+                  @for (item of pedido.items; track item.productoId) {
+                    <li>{{ item.cantidad }}x {{ item.nombreProducto }}</li>
+                  }
+                </ul>
+              </td>
+              <td class="admin-pedidos__monto">{{ formatoMonto(pedido.total) }}</td>
+              <td>
+                <span class="admin-pedidos__estado-badge admin-pedidos__estado-badge--{{ pedido.estado.toLowerCase() }}">
+                  {{ pedido.estado }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </section>
